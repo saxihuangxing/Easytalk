@@ -1,0 +1,25 @@
+{
+  "name": "funtalk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --inspect=0.0.0.0:9229 index.js"
+  },
+  "author": "jackhuang",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "crypto": "^1.0.1",
+    "express": "~4.16.4",
+    "express-session": "^1.16.2",
+    "hashmap": "^2.3.0",
+    "mongodb": "^3.3.2",
+    "mongoose": "^5.7.4",
+    "request": "^2.88.0",
+    "string-random": "^0.1.3",
+    "winston": "2.4.2",
+    "winston-daily-rotate-file": "1.7.2"
+  }
+}

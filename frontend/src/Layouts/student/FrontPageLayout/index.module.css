@@ -1,0 +1,30 @@
+.container {
+    position: relative;
+    width: 100wh;
+    min-width: 1200px;
+    height: 100vh;
+    background-image: url(bg.png);
+    background-size: 100% 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.fusion {
+    margin: 8px 20px;
+    width: 100px;
+    color: #FFFFFF;
+    font-size: 20px;
+}
+.loginIn {
+    margin: 0 20px;
+    color: #FFFFFF;
+}
+
+.backNav {
+    background-color: cadetblue;
+    display: flex;
+}
+
+.Item {
+    width: 120px;
+}

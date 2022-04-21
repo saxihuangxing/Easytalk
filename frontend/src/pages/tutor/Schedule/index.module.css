@@ -1,0 +1,23 @@
+.ConfirmButton{
+}
+.slot{
+  width: 100%;
+  height: 26px;
+}
+
+.slotPassed{
+  background-color: grey;
+}
+
+.slotUnavailable{
+  background-color: cornsilk;
+}
+
+.slotAvailable{
+  background-color: forestgreen;
+}
+
+.lostBooked{
+  background-color: crimson;
+}
+
