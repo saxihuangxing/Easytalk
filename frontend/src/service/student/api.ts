@@ -6,6 +6,18 @@ import Constant from '@/constant';
 export interface StudentStructure{
   accountName:string,
   accountPassword:string,
+  name: string,
+}
+
+export interface LessonStructure{
+  stuId: string,
+  stuName: string,
+  tutorId: string,
+  tutorName: string,
+  bookTime: Number,
+  lessonTime: string,
+  textBook: string,
+  lessonType: string,  // 'book' | 'sudden'
 }
 export interface StudentEnrollResult{
   code:number,
@@ -47,13 +59,39 @@ export async function login( values:StudentStructure ) {
   }
 }
 
-export async function getAllTutorInfo(projection) {
-  const params = {
-    projection
-  };
-  const res = await Axios.post('/api/student/getAllTutorInfo',params);
-  if(res.status == 200){
-    return res.data;
-  }
-  return null;
+export async function getSelfInfo(){
+  try{
+    const response = await Axios.post('/api/student/studentGetSelfInfo', {}); 
+    const { data } = response;
+    if(data.code === Constant.RES_SUCCESS){
+      return data.data;
+    }else{
+      console.error(`getSelfInfo failed , response = ${JSON.stringify(data)}`)
+      return null;
+    }
+   }catch(err){
+     return null;
+   }
 }
+
+export async function bookLesson( lesson:LessonStructure ) {
+  try{
+    const response = await Axios.post('/api/student/bookLesson', {lesson}); 
+    const { data } = response;
+    return data; 
+   }catch(err){
+     return { "code":Constant.RES_FAILED }
+   }
+}
+
+export async function getBookedLesson() {
+  try{
+    const response = await Axios.post('/api/student/getBookedLesson'); 
+    const { data } = response;
+    return data; 
+   }catch(err){
+     return { "code":Constant.RES_FAILED }
+   }
+}
+
+

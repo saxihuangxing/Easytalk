@@ -13,6 +13,27 @@ const Constant = {
         EXIST_USERNAME: 0,
         WRONG_ROLE: 1,
         UNKNOWN: -1,
+    },
+    LESSON_TYPE:{
+        BOOK: 'book',
+        SUDDEN: 'sudden'
+    },
+    LESSON_STATUS:{
+        WAITING: 'waiting',
+        TAKING: 'taking',
+        FINISHED: 'finished',
+    },
+    SCHEDULE_STATUS:{
+        PASSED: -1,
+        Default: 0,
+        Available: 1,
+        BOOKED: 2,
+    },
+    Book_FAIL_REASON:{
+        UNKNOW: -1,
+        DATA_INCOMPELETE: 0,
+        TUTOR_UNAVAILABLE: 1,
+        INSUFFIENT_COIN: 2,
     }
 }
 

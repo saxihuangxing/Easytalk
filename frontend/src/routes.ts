@@ -4,7 +4,9 @@ import StudentLayout from '@/Layouts/student/BasicLayout';
 import FrontPageLayout from '@/Layouts/tutor/FrontPageLayout';
 import Account from '@/pages/tutor/Account';
 import StudentWelPage from '@/Layouts/student/FrontPageLayout';
-import TutorList from '@/pages/student/TutorList';
+import StudentMainPage from '@/pages/student/index';
+import TutorProfile from '@/pages/student/TutorProfile';
+import StuBookedLesson from '@/pages/student/BookedLesson';
 import AdminLoginLayout from '@/Layouts/admin/UserLayout';
 import AdminBasicLayout from '@/Layouts/admin/BasicLayout';
 import AdminLogin from '@/pages/admin/UserLogin';
@@ -69,7 +71,9 @@ const routerConfig: IRouterConfig[] = [
         path: '/home',
         component: StudentLayout,
         children: [
-          { path: '/', component: TutorList },
+          { path: '/tutorDetail', component: TutorProfile },  
+          { path: '/bookedLessons', component: StuBookedLesson },
+          { path: '/main', component: StudentMainPage() },
         ],
       },
       {

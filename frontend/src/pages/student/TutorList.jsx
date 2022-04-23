@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { List, Avatar, Box, Divider, Button } from '@alifd/next';
-import { getAllTutorInfo } from '@/service/student/api';
+import { getAllTutorInfo } from '@/service/common/api';
 import { ConsoleSqlOutlined } from '@ant-design/icons';
 import Constant from '@/constant';
+import { studentInit } from '@/service/student/data';
 
 // eslint-disable-next-line @iceworks/best-practices/recommend-functional-component
 export default class tutorInfo extends React.Component {
@@ -11,9 +12,19 @@ export default class tutorInfo extends React.Component {
     this.state = {
       data: [],
     };
+    studentInit(); 
   }
 
-  handleClickItem = async () => {};
+  handleClickItem = async (index) => {
+    const { data } = this.state;
+    const itemData = data[index];
+    if(itemData){
+          const url = `#/home/tutorDetail?tutorId=${itemData.id}`
+          window.location.href = url;
+    }else{
+      alert("can't find item data");
+    }
+  };
 
   componentDidMount() {
     console.log('search >>> componentDidMount');
@@ -49,6 +60,7 @@ export default class tutorInfo extends React.Component {
               key={i}
               media={<img width="161" height="108" src={item.img} />}
               title={item.title}
+              onClick = {() => { this.handleClickItem(i)}}
             >
               <p style={{ margin: '12px 0' }}>{item.description}</p>
               <div>{item.author}</div>

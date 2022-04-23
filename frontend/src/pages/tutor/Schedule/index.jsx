@@ -4,7 +4,7 @@ import moment from 'moment';
 import styles from './index.module.css';
 import { getTutorSchedule, setTutorSchedule } from '@/service/tutor/dataSource';
 import Constant from '@/constant';
-
+import Config from '@/config/config';
 const { Item } = MenuButton;
 const times = [
   '0:00-0:30 am',
@@ -57,7 +57,7 @@ const times = [
   '11:30-12:00 pm',
 ];
 
-const maxDays = 7;
+const maxDays = Config.scheduleMaxDays;
 
 // eslint-disable-next-line @iceworks/best-practices/recommend-functional-component
 export default class Schedule extends Component {
@@ -105,7 +105,7 @@ export default class Schedule extends Component {
       case -1:
         classStyle = styles.slotPassed;
         break;
-      case -0:
+      case 0:
         classStyle = styles.slotUnavailable;
         break;
       case 1:
@@ -153,16 +153,22 @@ export default class Schedule extends Component {
   dataSource() {
     const result = [];
     const statusArr = this.state.statusArr;
+     
     for (let i = 0; i < 48; i++) {
+      const Obj = {};
+      Array.from({ length: maxDays }, (_, j) => {
+        Obj['day' + j] = statusArr[i][j];
+      });
       result.push({
         time: times[i],
-        day0: statusArr[i][0],
+        ...Obj
+        /* day0: statusArr[i][0],
         day1: statusArr[i][1],
         day2: statusArr[i][2],
         day3: statusArr[i][3],
         day4: statusArr[i][4],
         day5: statusArr[i][5],
-        day6: statusArr[i][6],
+        day6: statusArr[i][6], */
       });
     }
     return result;

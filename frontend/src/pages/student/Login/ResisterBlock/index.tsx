@@ -15,6 +15,7 @@ export interface RegisterProps {
   rePassword: string;
   phone: string;
   code: string;
+  name: string;
 }
 
 export default function RegisterBlock() {
@@ -66,11 +67,12 @@ export default function RegisterBlock() {
       console.log('errors', errors);
       return;
     }
-    const data:StudentStructure = { accountName:values.email, accountPassword:values.password }; 
+    const data:StudentStructure = { accountName:values.phone, accountPassword:values.password,
+       name:values.name }; 
     const res:StudentEnrollResult = await enroll(data);
     if(res.code == CONSTANT.RES_SUCCESS){
       Message.success('register successful');
-      window.location.href = "#/home";   
+      window.location.href = "#/home/main";   
     }else{
       let errReason:string = "";
       if(res.reason == CONSTANT.ENROLL_FAIL_REASON.EXIST_USERNAME){
@@ -88,9 +90,44 @@ export default function RegisterBlock() {
         <p className={styles.desc}>Register account</p>
 
         <Form value={postData} onChange={formChange} size="large">
-          <Item format="email" required requiredMessage="neccessary">
-            <Input name="email" size="large" maxLength={20} placeholder="email" />
+        <Item format="tel" required requiredMessage="必填" asterisk={false}>
+            <Input
+              name="phone"
+              size="large"
+              innerBefore={
+                <span className={styles.innerBeforeInput}>
+                  +86
+                  <span className={styles.line} />
+                </span>
+              }
+              maxLength={20}
+              placeholder="手机号"
+            />
           </Item>
+         {/*  <Item required requiredMessage="必填">
+            <Input
+              name="code"
+              size="large"
+              innerAfter={
+                <span className={styles.innerAfterInput}>
+                  <span className={styles.line} />
+                  <Form.Submit
+                    text
+                    type="primary"
+                    style={{ width: 64 }}
+                    disabled={!!isRunning}
+                    validate={['phone']}
+                    onClick={sendCode}
+                    className={styles.sendCode}
+                  >
+                    {isRunning ? `${second}秒后再试` : '获取验证码'}
+                  </Form.Submit>
+                </span>
+              }
+              maxLength={20}
+              placeholder="验证码"
+            />
+          </Item> */}
           <Item required requiredMessage="neccessary">
             <Input.Password
               name="password"
@@ -105,6 +142,13 @@ export default function RegisterBlock() {
               size="large"
               htmlType="password"
               placeholder="confirm password"
+            />
+          </Item>
+          <Item required requiredTrigger="onFocus" requiredMessage="neccessary">
+            <Input
+              name="name"
+              size="large"
+              placeholder="name"
             />
           </Item>
           <Item>

@@ -24,25 +24,3 @@ export async function login( values:AdminStructure ) {
     return {"code":Constant.RES_FAILED}
   }
 }
-
-export async function getAllTutorInfo(projection) {
-    const params = {
-      projection
-    };
-    const res = await Axios.post('/api/student/getAllTutorInfo',params);
-    if(res.status == 200){
-      return res.data;
-    }
-    return null;
-}
-
-export async function getAllStudentInfo(projection) {
-  const params = {
-    projection
-  };
-  const res = await Axios.post('/api/student/getAllStudentInfo',params);
-  if(res.status == 200){
-    return res.data;
-  }
-  return null;
-}

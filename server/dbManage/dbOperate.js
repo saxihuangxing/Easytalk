@@ -1,12 +1,13 @@
-var tutorScheme = require("./tutorScheme.js");
-var adminScheme = require("./adminScheme.js");
-var studentScheme = require("./studentScheme.js");
-var Logger = require("../utils/Logger");
+let tutorScheme = require("./tutorScheme.js");
+let adminScheme = require("./adminScheme.js");
+let studentScheme = require("./studentScheme.js");
+let lessonScheme = require("./lessonScheme.js");
+let Logger = require("../utils/Logger");
 
 class DbOperator {
   add(params) {
     //console.log("dbadd:" + JSON.stringify(params) + "  contruct = " + this.Module.constructor);
-    var module = new this.Module(params);
+    let module = new this.Module(params);
     return new Promise((resolve, reject) => {
       module.save(function (err, res) {
         if (err) {
@@ -140,6 +141,9 @@ module.exports = (moduleType) => {
     case "student":
       dbOperator.Module = studentScheme;
       break;
+    case "lesson":
+        dbOperator.Module = lessonScheme;
+        break;
     default:
       dbOperator.Module = tutorScheme;
       break;

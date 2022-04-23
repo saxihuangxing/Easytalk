@@ -20,7 +20,8 @@ router.post('/login', async function(req, res, next) {
     try{
         const data = await dbCol.findOnePromise({ accountPassword:param.accountPassword,accountName:param.accountName }); 
         if(data){
-            req.session.id = data.id;
+            req.session.userId = data.id;
+            req.session.role = param.role;
             res.send(`{"code":${CONSTANT.RES_SUCCESS}}`);
             Logger.info(param.accountName + " login sucess");
             return;
@@ -37,6 +38,7 @@ router.post('/enroll', async function(req, res, next) {
     //利用bodyParser 获取表单提交的数据
     const param = req.body;
     const {APPLY_STATUS,ENROLL_FAIL_REASON} = CONSTANT;
+    let id = "00001";
     try{
         if(param.role === 'tutor'){
             const isExist = await dbTutor.exist({ accountName:param.accountName });
@@ -44,7 +46,7 @@ router.post('/enroll', async function(req, res, next) {
                 res.send({"code":CONSTANT.RES_FAILED,reason:ENROLL_FAIL_REASON.EXIST_USERNAME});
                 return;
             }
-            const id = getOnlyId(dbTutor);
+            id = await getOnlyId(dbTutor);
             const data = { id,accountName:param.accountName,accountPassword: param.accountPassword,
                 applyStatus:APPLY_STATUS.CHECKING }; 
             await dbTutor.add(data);      
@@ -54,7 +56,7 @@ router.post('/enroll', async function(req, res, next) {
                 res.send({"code":CONSTANT.RES_FAILED,reason:ENROLL_FAIL_REASON.EXIST_USERNAME});
                 return;
             }
-            const id = getOnlyId(dbStudent);
+            id = await getOnlyId(dbStudent);
             const data = { id, accountName:param.accountName,accountPassword: param.accountPassword }; 
             await dbStudent.add(data);      
         }else{
@@ -65,6 +67,8 @@ router.post('/enroll', async function(req, res, next) {
         res.send({"code":CONSTANT.RES_FAILED,reason:ENROLL_FAIL_REASON.UNKNOWN,errDetail:err});
         return;
     }
+    req.session.userId = id;
+    req.session.role = param.role;
     res.send({"code":CONSTANT.RES_SUCCESS});
 });
 

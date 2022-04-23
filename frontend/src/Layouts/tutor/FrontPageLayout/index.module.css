@@ -3,7 +3,7 @@
     width: 100wh;
     min-width: 1200px;
     height: 100vh;
-    background-image: url(bg.png);
+    background-image: url(bg_tutor.png);
     background-size: 100% 100%;
     display: flex;
     flex-direction: column;

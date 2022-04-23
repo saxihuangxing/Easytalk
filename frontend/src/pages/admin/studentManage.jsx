@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { Table, Pagination, Icon, Message, Button } from '@alifd/next';
 import { Link } from 'react-router-dom';
-import { getAllStudentInfo } from '@/service/admin/api';
+import { getAllStudentInfo } from '@/service/common/api';
 import CommonUtil from '@/utils/CommonUtils';
 
 export default class studentManage extends Component {

@@ -18,7 +18,11 @@
         TUTOR:'tutor',
         STUDENT:'student',
         ADMIN:'admin'
-    }
+    },
+    LESSON_TYPE:{
+        BOOK: 'book',
+        SUDDEN: 'sudden'
+    },
     
 }
 

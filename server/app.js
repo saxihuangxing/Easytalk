@@ -3,10 +3,12 @@ var express = require('express');
 const session = require("express-session");
 var path = require('path');
 var cookieParser = require('cookie-parser');
-//var logger = require('morgan');
 const access = require('./routers/access/index');
 const tutorRouter = require('./routers/tutor/index');
-const studentRouter = require('./routers/student/studentRouter');
+const studentRouter = require('./routers/student/index');
+const adminRouter = require('./routers/admin/index');
+const commonRouter = require('./routers/common/index');
+
 var app = express();
 
 app.use(function (req, res, next) {
@@ -36,7 +38,7 @@ app.use(function (req, res, next) {
     if (currPath == "/user/login"  || currPath == "/user/logout" || currPath == "/user/enroll") {
         next();
     } else {
-        if (req.session.id) {
+        if (req.session.userId) {
             // app.locals["userInfo"] = req.session.userInfo.username;
             //如果已经登录，继续执行
             next();
@@ -62,7 +64,8 @@ app.use(cookieParser());
 app.use('/user', access);
 app.use('/tutor', tutorRouter);
 app.use('/student', studentRouter);
-//app.use('/admin', countInfoRouter);
+app.use('/admin', adminRouter);
+app.use('/common', commonRouter);
 
 
 // catch 404 and forward to error handler
