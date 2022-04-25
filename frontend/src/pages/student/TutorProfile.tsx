@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { List, Avatar, Box, Divider, Button, Tag, Table, Message } from '@alifd/next';
+import { Dialog, Avatar, Box, Divider, Button, Tag, Table, Message } from '@alifd/next';
 import { getTutorInfoById } from '@/service/common/api';
 import { bookLesson, LessonStructure } from '@/service/student/api'
 import Constant from '@/constant';
@@ -16,7 +16,9 @@ export default class tutorInfo extends React.Component {
     super(props);
     this.state = {
       data: undefined,
+      dlgVisible:false,
     };
+    this.curSlotTime = null;
   }
 
   componentDidMount() {
@@ -136,8 +138,26 @@ export default class tutorInfo extends React.Component {
             />
           </Table>
         )}
+        <Dialog
+          v2
+          title="Book Lesson"
+          visible={ this.state.dlgVisible }
+          onOk={this.dlgConfirm.bind(this)}
+          onClose={this.dlgCancel.bind(this)}
+        >
+          <p>Book This Lesson will Spend twenty coins</p>
+        </Dialog>
       </div>
     );
+  }
+
+  dlgCancel(){
+    this.setState({dlgVisible:false});
+  }
+
+  dlgConfirm(){
+    this.setState({dlgVisible:false});
+    this.startBookLesson(this.curSlotTime);
   }
 
   fetchTutorInfoById = async (id) => {
@@ -161,28 +181,36 @@ export default class tutorInfo extends React.Component {
     const { data } = this.state;
     const { scheduleMap } = data;
     const status = scheduleMap[slotTime];
-    const myInfo = getMyInfo();
-    const bookTime = (new Date()).getTime();
     //alert('status = ' + status);
     if (status === 1) {
-      const lesson:LessonStructure = {
-        stuId: myInfo.id,
-        stuName: myInfo.name,
-        tutorId: data.id,
-        tutorName: data.name,
-        bookTime,
-        lessonTime: slotTime,
-        textBook: "have't decide",
-        lessonType: Constant.LESSON_TYPE.BOOK, 
-      }
-      const res = await bookLesson(lesson);
-      if(res.code === Constant.RES_SUCCESS){
-          Message.success(" book successful !");
-          scheduleMap[slotTime] = 2;
-          this.setState({data});
-      }else{
-          Message.success(" book failed !");
-      }
+      this.curSlotTime = slotTime;
+      this.setState({dlgVisible:true});
     }     
+  }
+
+  async startBookLesson(slotTime){
+    const { data } = this.state;
+    const { scheduleMap } = data;
+    const status = scheduleMap[slotTime];
+    const myInfo = getMyInfo();
+    const bookTime = (new Date()).getTime();
+    const lesson:LessonStructure = {
+      stuId: myInfo.id,
+      stuName: myInfo.name,
+      tutorId: data.id,
+      tutorName: data.name,
+      bookTime,
+      lessonTime: slotTime,
+      textBook: "have't decide",
+      lessonType: Constant.LESSON_TYPE.BOOK, 
+    }
+    const res = await bookLesson(lesson);
+    if(res.code === Constant.RES_SUCCESS){
+        Message.success(" book successful !");
+        scheduleMap[slotTime] = 2;
+        this.setState({data});
+    }else{
+        Message.success(" book failed !");
+    }
   }
 }

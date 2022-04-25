@@ -3,6 +3,7 @@ var router = express.Router();
 const Logger = require('../../utils/Logger');
 const dbCol = require('../../dbManage/dbOperate')('tutor');
 const CONSTANT = require('../../constant');
+const Constant = require('../../constant');
 
 
 router.post('/updateTutorInfo', async function(req, res, next) {
@@ -41,6 +42,16 @@ router.post('/setTutorSchedule', async function(req, res, next) {
     const scheduleMap = req.body.scheduleMap;
     const query = { id:req.session.userId }; 
     try{
+        const tutor = await dbCol.findOnePromise(query); 
+        const oldScheduleMap = tutor.scheduleMap;
+        for (const [key, value] of oldScheduleMap) {
+            if(value === Constant.SCHEDULE_STATUS.BOOKED
+            && scheduleMap[key] !== Constant.SCHEDULE_STATUS.BOOKED){
+            Logger.error(`setTutorSchedule error, can't change already booked lesson status`);
+            res.send({ code:CONSTANT.RES_FAILED });  
+            return;
+          }
+        }
         const result = await dbCol.updateOne(query,{scheduleMap}); 
         if(result.n > 0){
             res.send({ code:CONSTANT.RES_SUCCESS }); 

@@ -8,6 +8,7 @@ const tutorRouter = require('./routers/tutor/index');
 const studentRouter = require('./routers/student/index');
 const adminRouter = require('./routers/admin/index');
 const commonRouter = require('./routers/common/index');
+const startLessonMonitor = require('./service/lessonMonitor');
 
 var app = express();
 
@@ -28,7 +29,7 @@ app.use(session({
     rolling: true
 }));
 
-
+const interval = startLessonMonitor();
 
 app.use(express.static(path.join(__dirname, 'public')));
 

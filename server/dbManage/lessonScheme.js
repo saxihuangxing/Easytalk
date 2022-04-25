@@ -7,8 +7,8 @@ var LessonSchema = new Schema({
     stuName: { type: String },
     tutorId: { type: String },
     tutorName: { type: String},
-    bookTime: { type: Number },
-    lessonTime: { type: Number },
+    bookTime: { type: Number },     //in ms
+    lessonTime: { type: Number },   //in minute
     textBook: { type: String },
     lessonType: { type: String },  // 'book' | 'sudden'
     status: { type: String },      // 'waiting' | 'taking' | 'finished'    

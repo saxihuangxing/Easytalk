@@ -7,6 +7,8 @@ const config  = {
         "filename": "/var/log/funtalk_backend.log",
         "level": "verbose"
     },
+    oneClassTime: 25, //unit minute
+    cancelLessonlimitTime : 180,   // unit minute
 };
 
 

@@ -7,6 +7,7 @@ import StudentWelPage from '@/Layouts/student/FrontPageLayout';
 import StudentMainPage from '@/pages/student/index';
 import TutorProfile from '@/pages/student/TutorProfile';
 import StuBookedLesson from '@/pages/student/BookedLesson';
+import StuHistoryLesson from '@/pages/student/HistoryLesson';
 import AdminLoginLayout from '@/Layouts/admin/UserLayout';
 import AdminBasicLayout from '@/Layouts/admin/BasicLayout';
 import AdminLogin from '@/pages/admin/UserLogin';
@@ -73,6 +74,7 @@ const routerConfig: IRouterConfig[] = [
         children: [
           { path: '/tutorDetail', component: TutorProfile },  
           { path: '/bookedLessons', component: StuBookedLesson },
+          { path: '/historyLessons', component: StuHistoryLesson },
           { path: '/main', component: StudentMainPage() },
         ],
       },

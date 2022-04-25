@@ -84,9 +84,44 @@ export async function bookLesson( lesson:LessonStructure ) {
    }
 }
 
+export async function cancelLesson(lessonId) {
+  try{
+    const response = await Axios.post('/api/student/cancelLesson', 
+      { lessonId }); 
+    const { data } = response;
+    return data; 
+   }catch(err){
+     return { "code":Constant.RES_FAILED }
+   }
+}
+
 export async function getBookedLesson() {
   try{
-    const response = await Axios.post('/api/student/getBookedLesson'); 
+    const response = await Axios.post('/api/student/getMyLesson',
+    { query:{ $or: [{ status:Constant.LESSON_STATUS.WAITING },
+      { status:Constant.LESSON_STATUS.TAKING }] }}); 
+    const { data } = response;
+    return data; 
+   }catch(err){
+     return { "code":Constant.RES_FAILED }
+   }
+}
+
+export async function getHistoryLesson() {
+  try{
+    const response = await Axios.post('/api/student/getMyLesson',
+    { query:{ status:Constant.LESSON_STATUS.FINISHED  }}); 
+    const { data } = response;
+    return data; 
+   }catch(err){
+     return { "code":Constant.RES_FAILED }
+   }
+}
+
+export async function getCanceledLesson() {
+  try{
+    const response = await Axios.post('/api/student/getMyLesson',
+    { query:{ status:Constant.LESSON_STATUS.CANCELED } });
     const { data } = response;
     return data; 
    }catch(err){

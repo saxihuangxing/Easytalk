@@ -5,7 +5,6 @@ const Constant = require('../constant');
  async function getOnlyId(dbCol){
     for(let i = 0;i<100; i++){                              
       const id = Math.random().toString().substring(3,10);
-      console.log("id = " + id);
       const exist = await dbCol.exist({ id });
       if(!exist){
           return id;
@@ -15,11 +14,11 @@ const Constant = require('../constant');
     throw("can't find suitable Id");
 }
 
-async function checkTutorAvailable(tutorId,time){
+async function checkTutorStatus(tutorId, time, status){
     try{
         let data =  await dbTutor.findOneLimiteFiledsPromise({id:tutorId},{scheduleMap:1});
         if(data && data.scheduleMap){
-            if(data.scheduleMap.get(time) == Constant.SCHEDULE_STATUS.Available){
+            if(data.scheduleMap.get(time.toString()) == status){
                 return true;
             }
         }
@@ -33,7 +32,7 @@ async function setTutorSchedule(tutorId,time,status){
     try{
         let data =  await dbTutor.findOneLimiteFiledsPromise({id:tutorId},{scheduleMap:1});
         if(data && data.scheduleMap){
-            data.scheduleMap.set(time,status);
+            data.scheduleMap.set(time.toString(),status);
         }else{
             return false;
         }
@@ -48,6 +47,6 @@ async function setTutorSchedule(tutorId,time,status){
 
 module.exports = {
     getOnlyId,
-    checkTutorAvailable,
+    checkTutorStatus,
     setTutorSchedule,
 }

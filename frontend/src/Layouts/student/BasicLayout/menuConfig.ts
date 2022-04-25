@@ -10,6 +10,11 @@ const asideMenuConfig = [
     name: 'Booked Lessons',
     path: '/home/bookedLessons',
     icon: SmileOutlined,
+  },
+  {
+    name: 'History Lessons',
+    path: '/home/historyLessons',
+    icon: SmileOutlined,
   }
 ];
 

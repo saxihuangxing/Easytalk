@@ -190,6 +190,7 @@ export default class Schedule extends Component {
       Message.success('update schedule success');
     }else{
       Message.error('update schedule failed');
+      this.fetchTutorSchedule();
     }
   }
 

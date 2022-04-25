@@ -21,6 +21,7 @@ const Constant = {
     LESSON_STATUS:{
         WAITING: 'waiting',
         TAKING: 'taking',
+        CANCELED: 'CANCELED',
         FINISHED: 'finished',
     },
     SCHEDULE_STATUS:{
@@ -34,6 +35,11 @@ const Constant = {
         DATA_INCOMPELETE: 0,
         TUTOR_UNAVAILABLE: 1,
         INSUFFIENT_COIN: 2,
+    },
+    CANCEL_LESSON_FAIL_REASON:{
+        UNKNOW: -1,
+        TimeTooClose: 0,
+        LessonInfoError: 1,
     }
 }
 
