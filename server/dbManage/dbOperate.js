@@ -7,7 +7,8 @@ let Logger = require("../utils/Logger");
 class DbOperator {
   add(params) {
     //console.log("dbadd:" + JSON.stringify(params) + "  contruct = " + this.Module.constructor);
-    let module = new this.Module(params);
+    const module = new this.Module(params);
+   /*  return module.save(); */
     return new Promise((resolve, reject) => {
       module.save(function (err, res) {
         if (err) {
@@ -80,6 +81,20 @@ class DbOperator {
   updateOne(query, data) {
     return new Promise((resolve, reject) => {
       this.Module.updateOne(query, data, function (err, res) {
+        if (err) {
+          Logger.error(`db updateOne ${JSON.stringify(err)}`);
+          reject(err);
+        } else {
+          resolve(res);
+        }
+      });
+    });
+  }
+
+
+  update(query, data) {
+    return new Promise((resolve, reject) => {
+      this.Module.update(query, data, function (err, res) {
         if (err) {
           Logger.error(`db updateOne ${JSON.stringify(err)}`);
           reject(err);

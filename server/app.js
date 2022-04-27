@@ -8,6 +8,8 @@ const tutorRouter = require('./routers/tutor/index');
 const studentRouter = require('./routers/student/index');
 const adminRouter = require('./routers/admin/index');
 const commonRouter = require('./routers/common/index');
+const fileUpload = require('express-fileupload');
+
 const startLessonMonitor = require('./service/lessonMonitor');
 
 var app = express();
@@ -16,6 +18,10 @@ app.use(function (req, res, next) {
     req.url = req.url.replace("/api/","/");
     next();
 });
+
+app.use(fileUpload({
+    createParentPath: true
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

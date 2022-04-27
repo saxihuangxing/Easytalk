@@ -88,3 +88,19 @@ export async function setTutorInfo(params) {
   }
   return null;
 }
+
+export async function deletePhoto(fileName:string) { 
+  const res = await Axios.post('/api/tutor/delete-photo', { fileName });
+  if(res.status == 200){
+    return res.data;
+  }
+  return null;
+}
+
+export async function deleteVideo(fileName:string) { 
+  const res = await Axios.post('/api/tutor/delete-video', { fileName });
+  if(res.status == 200){
+    return res.data;
+  }
+  return null;
+}

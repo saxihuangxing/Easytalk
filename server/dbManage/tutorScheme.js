@@ -13,7 +13,9 @@ var Tutorchema = new Schema({
     gender:{ type:String },
     nationality:{ type:String },
     introduction : { type: String },
-    email: {type: String},
+    email: { type: String },
+    photos: { type: Array, default: [] },
+    video: { type: String },
     scheduleMap: { type: Map },
 });
 

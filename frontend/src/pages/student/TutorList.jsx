@@ -3,6 +3,7 @@ import { List, Avatar, Box, Divider, Button } from '@alifd/next';
 import { getAllTutorInfo } from '@/service/common/api';
 import { ConsoleSqlOutlined } from '@ant-design/icons';
 import Constant from '@/constant';
+import Config from '@/config/config';
 import { studentInit } from '@/service/student/data';
 
 // eslint-disable-next-line @iceworks/best-practices/recommend-functional-component
@@ -43,13 +44,18 @@ export default class tutorInfo extends React.Component {
   render() {
     const { data } = this.state;
     const tutorInfoArr = data.map((item) => {
-        const tutorInfo =  {
-            title: item.name,
-            description: item.introduction,
-            author: "",
-            img: "https://img.alicdn.com/tfs/TB1R5fio4v1gK0jSZFFXXb0sXXa-322-216.png"
-          }
-          return tutorInfo;
+      let imgUrl = "";
+      if(item.photos && item.photos.length > 0){
+        imgUrl = Config.serverUrl +  item.photos[0];
+      }
+      console.log("imgUrl -  " + imgUrl);
+      const tutorInfo =  {
+          title: item.name + "1",
+          description: item.introduction,
+          author: "",
+          img: imgUrl
+        }
+      return tutorInfo;
     })
     return (
       <div>

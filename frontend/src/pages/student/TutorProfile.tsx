@@ -9,6 +9,8 @@ const maxDays = Config.scheduleMaxDays;
 import moment from 'moment'; 
 import styles from './tutorProfile.module.css';
 import { getMyInfo } from '@/service/student/data';
+import { Slider, Icon } from '@alifd/next';
+import { PhoneTwoTone } from '@ant-design/icons';
 
 // eslint-disable-next-line @iceworks/best-practices/recommend-functional-component
 export default class tutorInfo extends React.Component {
@@ -121,8 +123,31 @@ export default class tutorInfo extends React.Component {
     if (!data) {
       return <div>'unknown tutor'</div>;
     }
+    const photoEles = data.photos.map((file)=>{
+      const url = Config.serverUrl + file;
+      return(
+        <div  className="slider-img-wrapper">
+          <img style={{ width:'500px', height:'300px'}}  src={url} alt={""} />
+        </div>
+      )
+      } 
+    );
+    const MediaElements = [...photoEles];
+    if(data.video){
+      const url = Config.serverUrl + data.video;
+      const videoEle = (
+        <div  className="slider-img-wrapper">
+              <video  controls style={{ width:'500px', height:'300px'}} src={url} alt={""} />
+        </div>
+      )
+      MediaElements.unshift(videoEle);
+    }
+    
     return (
       <div>
+        <Slider style={{ width:'500px', height:'300px',marginLeft:'300px' }} arrowSize="medium">
+          {MediaElements}
+        </Slider>
         <span> {'Name:'} </span>
         <span> {data.name} </span>
         {data.scheduleMap && (
