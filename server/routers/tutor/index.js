@@ -94,7 +94,7 @@ router.post('/upload-photo', async (req, res) => {
                     if(tutor.photos.indexOf(url) < 0){ 
                         tutor.photos.push(url);
                     }
-                    tutor.save();    
+                    await tutor.save();    
                     res.send({
                         status: true,
                         message: 'File is uploaded' ,
@@ -141,7 +141,7 @@ router.post('/delete-photo', async (req, res) => {
             if (index > -1) {
                 tutor.photos.splice(index, 1); // 2nd parameter means remove one item only
             }
-            tutor.save();
+            await tutor.save();
             fs.unlinkSync(path);    
             res.send({ code:CONSTANT.RES_SUCCESS });  
             return; 
@@ -175,7 +175,7 @@ router.post('/upload-video', async (req, res) => {
                     const url =  '/files/' + video.name;
                     const tutor = await dbCol.findOnePromise(query);
                     tutor.video = url;
-                    tutor.save();    
+                    await tutor.save();    
                     res.send({
                         status: true,
                         message: 'File is uploaded' ,
@@ -219,7 +219,7 @@ router.post('/delete-video', async (req, res) => {
             const url =  '/files/' +　fileName;
             const tutor = await dbCol.findOnePromise(query); 
             tutor.video = "";
-            tutor.save();
+            await tutor.save();
             fs.unlinkSync(path);    
             res.send({ code:CONSTANT.RES_SUCCESS });  
             return; 

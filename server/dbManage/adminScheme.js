@@ -6,4 +6,4 @@ var AdminSchema = new Schema({
     accountPassword: { type: String },
 });
 
-module.exports =   mongoose.model('Admin',AdminSchema);
+module.exports = mongoose.model('Admin',AdminSchema);

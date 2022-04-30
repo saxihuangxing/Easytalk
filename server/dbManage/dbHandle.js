@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var config = require("../config/config");
-let DB_URL = config.dbUrl + 'funtalk';
+let DB_URL = config.dbUrl;
 const Logger = require('../utils/Logger');
 
 /**

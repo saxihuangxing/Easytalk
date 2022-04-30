@@ -5,8 +5,10 @@ const Logger = require('../../utils/Logger');
 const CONSTANT = require('../../constant');
 const dbTutor = require('../../dbManage/dbOperate')('tutor');
 const dbStudent = require('../../dbManage/dbOperate')('student');
+const dbWallet = require('../../dbManage/dbOperate')('wallet');
 const dbAdmin = require('../../dbManage/dbOperate')('admin');
-const { getOnlyId } = require('../../utils/common');
+const { getOnlyId } = require('../../utils/common'); 
+const mongoose = require('../../dbManage/dbHandle');
 
 const initAdminDb = () => {
     dbAdmin.updateOneOrAdd({ accountName:'huangxing' },{ "id":"00001", accountName:'huangxing', accountPassword:'c07681b88d6b2c4463e7a9a677efd8d4' });
@@ -57,14 +59,33 @@ router.post('/enroll', async function(req, res, next) {
                 return;
             }
             id = await getOnlyId(dbStudent);
-            const data = { id, accountName:param.accountName,accountPassword: param.accountPassword }; 
-            await dbStudent.add(data);      
+            const walletId = await getOnlyId(dbWallet);
+            const walletData = {id: walletId, userId : id, balance:config.walletInitCoin};
+            const data = { id, accountName:param.accountName, accountPassword: param.accountPassword,
+                walletId }; 
+           // const session = await mongoose.startSession()
+           // session.startTransaction();
+            try{    
+                  await dbWallet.add(walletData);
+                  await dbStudent.add(data);
+             //   await dbWallet.add([walletData],session);
+             //   await dbStudent.add([data],session);
+              //  await session.commitTransaction();
+            }catch(err){
+                Logger.error(`enroll student commitTransation error: ${err}`);
+               // await session.abortTransaction();
+                res.send({ code:CONSTANT.RES_FAILED, reson:CONSTANT.Book_FAIL_REASON.UNKNOW  }); 
+            //    session.endSession();
+                return;
+            } 
+          //  session.endSession();     
         }else{
-            res.send({"code":CONSTANT.RES_FAILED,reason:ENROLL_FAIL_REASON.WRONG_ROLE});
+            res.send({ "code":CONSTANT.RES_FAILED, reason:ENROLL_FAIL_REASON.WRONG_ROLE });
             return;
         }
     }catch(err){
-        res.send({"code":CONSTANT.RES_FAILED,reason:ENROLL_FAIL_REASON.UNKNOWN,errDetail:err});
+        Logger.error(`enroll exception ${err}`);
+        res.send({ "code":CONSTANT.RES_FAILED, reason:ENROLL_FAIL_REASON.UNKNOWN, errDetail:err });
         return;
     }
     req.session.userId = id;

@@ -1,12 +1,13 @@
 /* eslint no-underscore-dangle: 0 */
 import React, { Component } from 'react';
-import { Table, Pagination, Icon, Message, Button } from '@alifd/next';
-import { Link } from 'react-router-dom';
-import { getAllTutorInfo } from '@/service/common/api';
+import { Table, Pagination, Icon, Message, Button, Dialog, Input, NumberPicker } from '@alifd/next';
+import { getTopupApplyInfo,setTopupApplyResult } from '@/service/admin/api';
 import CommonUtil from '@/utils/CommonUtils';
+import Constant from '@/constant';
+import moment from 'moment';
 
-export default class TutorManage extends Component {
-  static displayName = 'Tutor List';
+export default class studentManage extends Component {
+  static displayName = 'Student List';
 
   static propTypes = {};
 
@@ -24,26 +25,24 @@ export default class TutorManage extends Component {
       },
       isLoading: false,
     };
+    this.currentPage = 1;
   }
 
   componentDidMount() {
-    //  this.fetchTutorsListData(1);
+    //  this.fetchApplytListData(1);
   }
 
   componentWillMount() {
-    this.fetchTutorsListData(1);
+    this.fetchApplytListData(1);
   }
 
-  /**
-   * 获取房间列表
-   */
 
-  fetchTutorsListData = async (page) => {
+  fetchApplytListData = async (page) => {
     const _this = this;
     const tableData = this.state.tableData;
 
     _this.setLoadingVisible(true);
-    const data = await getAllTutorInfo();
+    const data = await getTopupApplyInfo({ status:'waiting' });
     if (data != null && data.length > 0) {
       let list = [];
       CommonUtil.ganerateListFromTree(data, list, 1);
@@ -76,25 +75,21 @@ export default class TutorManage extends Component {
         tableData: tableData,
         isLoading: false,
       });
-      console.log('fetchTutorsListData failed.', data);
+      console.log('fetchApplytListData failed.', data);
     }
   };
 
   renderOperations = (value, index, record) => {
     return (
       <div className="operation-table-operation" style={styles.operationTable}>
-        <Link to={''} className={styles.action}>
-          details
-        </Link>
-        <Button
-          onClick={() => {
-            this.deleteTutor(record.tutorId);
-          }}
-        >
-          {' '}
-          delete{' '}
+        <Button type="primary" style={styles.button} onClick = {()=>{ this.topupApprove(record.id,true)}}>
+          Approve
         </Button>
-        <Button> deactive </Button>
+        <Button type="primary"   style={styles.button}
+            onClick = {()=>{ this.topupApprove(record.id,false)}}
+        >
+          Reject
+        </Button>
       </div>
     );
   };
@@ -109,7 +104,8 @@ export default class TutorManage extends Component {
    * 翻页处理
    */
   onChangePage = (currentPage) => {
-    this.fetchTutorsListData(currentPage);
+    this.fetchApplytListData(currentPage);
+    this.currentPage = currentPage;
   };
 
   render() {
@@ -124,14 +120,42 @@ export default class TutorManage extends Component {
           hasBorder={false}
         >
           <Table.Column
-            title="Name"
-            dataIndex="name"
+            title="Id"
+            dataIndex="id"
             width={200}
             alignHeader="left"
-            align="center"
+            align="left"
           />
-          <Table.Column title="nationality" dataIndex="nationality" width={120} alignHeader="center" align="center" />
-          <Table.Column title="操作" dataIndex="operation" width={150} align="center" cell={this.renderOperations} />
+          <Table.Column
+            title="Student Id"
+            dataIndex="stuId"
+            width={200}
+            alignHeader="left"
+            align="left"
+          />
+          <Table.Column
+            title="Student Name"
+            dataIndex="stuName"
+            width={200}
+            alignHeader="left"
+            align="left"
+          />
+           <Table.Column
+            title="Amount"
+            dataIndex="amount"
+            width={150}
+            alignHeader="left"
+            align="left"
+          />
+            <Table.Column
+            title="Time"
+            dataIndex="time"
+            width={150}
+            alignHeader="left"
+            align="left"
+            cell ={ (value, index, record)=>{return moment(value).format('MM-DD HH:mm');}}
+          />
+          <Table.Column title="Operate" dataIndex="operation" width={250} align="left" cell={this.renderOperations.bind(this)} />
         </Table>
         <div style={styles.paginationContainer}>
           <Pagination
@@ -145,10 +169,22 @@ export default class TutorManage extends Component {
     );
   }
 
-  deleteTutor(tutorId) {}
+  async topupApprove(id:String,result:Boolean){
+    const res = await setTopupApplyResult(id,result);
+    if(res.code == Constant.RES_SUCCESS){
+      Message.success("operator commit sucess!");
+      this.fetchApplytListData(this.currentPage);
+    }else{
+      Message.error("top up failed!");
+    }
+  }
 }
 
 const styles = {
+  button:{
+    marginRight: '5px',
+    marginBottom: '5px',
+  },
   cardContainer: {
     padding: '10px 10px 20px 10px',
   },

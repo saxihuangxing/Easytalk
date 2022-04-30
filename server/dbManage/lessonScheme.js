@@ -11,7 +11,8 @@ var LessonSchema = new Schema({
     lessonTime: { type: Number },   //in minute
     textBook: { type: String },
     lessonType: { type: String },  // 'book' | 'sudden'
-    status: { type: String },      // 'waiting' | 'taking' | 'finished'    
+    status: { type: String },      // 'waiting' | 'taking' | 'finished'
+    cost: { type: Number },    
 });
 
 module.exports =   mongoose.model('Lesson',LessonSchema);

@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const Logger = require('../../utils/Logger');
 const tutorDb = require('../../dbManage/dbOperate')('tutor');
-const studentDb = require('../../dbManage/dbOperate')('stusdent');
+const studentDb = require('../../dbManage/dbOperate')('student');
 const CONSTANT = require('../../constant');
 
 router.post('/getAllStudentInfo', async function(req, res, next) {

@@ -5,7 +5,7 @@ var Tutorchema = new Schema({
     id: { type: String },
     accountName : { type: String },
     accountPassword: { type: String },
-    applyStatus: { type: String},  // 'checking' || 'approved'
+    applyStatus: { type: String},  // 'checking' || 'approved' || declined
     status: { type: String },      // 'normal' || 'deactive'    
     name : { type: String },
     residence: { type: String },

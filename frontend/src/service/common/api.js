@@ -29,9 +29,12 @@ export async function getAllStudentInfo(projection) {
   const params = {
     projection
   };
-  const res = await Axios.post('/api/common/getAllStudentInfo',params);
+  let res = await Axios.post('/api/common/getAllStudentInfo',params);
   if(res.status == 200){
-    return res.data;
+    res = res.data;
+    if(res.code == Constant.RES_SUCCESS){
+      return res.data;
+    }
   }
   return null;
 }

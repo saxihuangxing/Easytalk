@@ -38,8 +38,6 @@ export default class BookedLesson extends React.Component {
     return (
       <Button onClick={onCancelButtonClick.bind(this)} > Cancel </Button>
     )
-
-  
   };
 
   render() {
@@ -81,7 +79,7 @@ export default class BookedLesson extends React.Component {
             <Table.Column title={"bookTime"} dataIndex="bookTime" 
               cell={(value, index, record) => {
                     return moment(value).format('MM-DD HH:mm');
-              }} />
+              }}/>
             <Table.Column title={"lessonTime"} dataIndex="lessonTime"
                cell={(value, index, record) => {
                     return moment(value*1000*60).format('MM-DD HH:mm');

@@ -3,6 +3,7 @@ var mongoose = require('./dbHandle.js'),
 
 var Studentschema = new Schema({
     id: { type: String },
+    walletId: { type: String },
     accountName : { type: String },
     accountPassword: { type: String },
     status: { type: String },      // 'normal' || 'deactive'    

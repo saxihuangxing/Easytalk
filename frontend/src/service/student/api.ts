@@ -129,4 +129,16 @@ export async function getCanceledLesson() {
    }
 }
 
+export async function TopupApply(amount) {
+  try{
+    const response = await Axios.post('/api/student/topupApply',
+    { amount });
+    const { data } = response;
+    return data; 
+   }catch(err){
+     return { "code":Constant.RES_FAILED }
+   }
+}
+
+
 

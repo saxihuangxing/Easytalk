@@ -8,11 +8,16 @@ import StudentMainPage from '@/pages/student/index';
 import TutorProfile from '@/pages/student/TutorProfile';
 import StuBookedLesson from '@/pages/student/BookedLesson';
 import StuHistoryLesson from '@/pages/student/HistoryLesson';
+import StuTopup from '@/pages/student/TopUp';
 import AdminLoginLayout from '@/Layouts/admin/UserLayout';
 import AdminBasicLayout from '@/Layouts/admin/BasicLayout';
 import AdminLogin from '@/pages/admin/UserLogin';
 import TutorManage from '@/pages/admin/tutorManage';
 import StudentManage from '@/pages/admin/studentManage';
+import AdminBookedLesson from '@/pages/admin/BookLesson';
+import AdminHistoryLesson from '@/pages/admin/HistoryLesson';
+import AdminTopupApply from '@/pages/admin/TopupManange';
+import AdminTopupApplyHistory from '@/pages/admin/topupApplyHistory';
 const Dashboard = lazy(() => import('@/pages/tutor/Dashboard'));
 const Schedule = lazy(() => import('@/pages/tutor/Schedule'));
 const Home = lazy(() => import('@/pages/tutor/Home'));
@@ -54,6 +59,10 @@ const routerConfig: IRouterConfig[] = [
         children: [
           { path: '/', exact: true, component: TutorManage },
           { path: '/studentMange', exact:true, component: StudentManage},
+          { path: '/bookedLesson', exact: true, component: AdminBookedLesson},
+          { path: '/historyLesson', exact:true, component: AdminHistoryLesson},
+          { path: '/topupApplyChecking', exact:true, component: AdminTopupApply},
+          { path: '/topupApplyHistory', exact:true, component: AdminTopupApplyHistory},
         ]
       },
       {
@@ -75,6 +84,7 @@ const routerConfig: IRouterConfig[] = [
           { path: '/tutorDetail', component: TutorProfile },  
           { path: '/bookedLessons', component: StuBookedLesson },
           { path: '/historyLessons', component: StuHistoryLesson },
+          { path: '/topup', component: StuTopup},
           { path: '/main', component: StudentMainPage() },
         ],
       },

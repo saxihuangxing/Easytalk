@@ -2,8 +2,9 @@
 import React, { Component } from 'react';
 import { Table, Pagination, Icon, Message, Button } from '@alifd/next';
 import { Link } from 'react-router-dom';
-import { getAllTutorInfo } from '@/service/common/api';
+import { getLessonInfo } from '@/service/admin/api';
 import CommonUtil from '@/utils/CommonUtils';
+import Constant from '@/constant';
 
 export default class TutorManage extends Component {
   static displayName = 'Tutor List';
@@ -27,23 +28,22 @@ export default class TutorManage extends Component {
   }
 
   componentDidMount() {
-    //  this.fetchTutorsListData(1);
   }
 
   componentWillMount() {
-    this.fetchTutorsListData(1);
+    this.fetchBookLessonListData(1);
   }
 
   /**
    * 获取房间列表
    */
 
-  fetchTutorsListData = async (page) => {
+  fetchBookLessonListData = async (page) => {
     const _this = this;
     const tableData = this.state.tableData;
 
-    _this.setLoadingVisible(true);
-    const data = await getAllTutorInfo();
+    this.setState({ isLoading: true });
+    const data = await getLessonInfo({ status: Constant.LESSON_STATUS.WAITING });
     if (data != null && data.length > 0) {
       let list = [];
       CommonUtil.ganerateListFromTree(data, list, 1);
@@ -76,40 +76,19 @@ export default class TutorManage extends Component {
         tableData: tableData,
         isLoading: false,
       });
-      console.log('fetchTutorsListData failed.', data);
+      console.log('fetchBookLessonListData failed.', data);
     }
   };
 
   renderOperations = (value, index, record) => {
     return (
       <div className="operation-table-operation" style={styles.operationTable}>
-        <Link to={''} className={styles.action}>
-          details
-        </Link>
-        <Button
-          onClick={() => {
-            this.deleteTutor(record.tutorId);
-          }}
-        >
-          {' '}
-          delete{' '}
-        </Button>
-        <Button> deactive </Button>
       </div>
     );
   };
 
-  setLoadingVisible = (isLoading) => {
-    this.setState({
-      isLoading,
-    });
-  };
-
-  /**
-   * 翻页处理
-   */
   onChangePage = (currentPage) => {
-    this.fetchTutorsListData(currentPage);
+    this.fetchBookLessonListData(currentPage);
   };
 
   render() {
@@ -123,15 +102,31 @@ export default class TutorManage extends Component {
           style={styles.basicTable}
           hasBorder={false}
         >
-          <Table.Column
-            title="Name"
-            dataIndex="name"
-            width={200}
-            alignHeader="left"
-            align="center"
-          />
-          <Table.Column title="nationality" dataIndex="nationality" width={120} alignHeader="center" align="center" />
-          <Table.Column title="操作" dataIndex="operation" width={150} align="center" cell={this.renderOperations} />
+          
+          <Table.Column title={"LessonId"} dataIndex="lessonId"  />
+            <Table.Column title={"TutorId"} dataIndex="tutorId"  />
+            <Table.Column title={"TutorName"} dataIndex="tutorName"  />
+            <Table.Column title={"studentId"} dataIndex="stuId"  />
+            <Table.Column title={"studentName"} dataIndex="stuName"  />
+            <Table.Column title={"bookTime"} dataIndex="bookTime" 
+              cell={(value, index, record) => {
+                    return moment(value).format('MM-DD HH:mm');
+              }} />
+            <Table.Column title={"lessonTime"} dataIndex="lessonTime"
+               cell={(value, index, record) => {
+                    return moment(value*1000*60).format('MM-DD HH:mm');
+              }}
+            />
+            <Table.Column title={"status"} dataIndex="status"
+               cell={(value, index, record) => {
+                    if(value === Constant.LESSON_STATUS.WAITING){
+                       return "waiting...";
+                    }else {
+                        return "wrong status"
+                    }
+              }}
+            />
+             <Table.Column title={"TextBook"} dataIndex="textBook"  /> 
         </Table>
         <div style={styles.paginationContainer}>
           <Pagination
@@ -144,8 +139,6 @@ export default class TutorManage extends Component {
       </div>
     );
   }
-
-  deleteTutor(tutorId) {}
 }
 
 const styles = {

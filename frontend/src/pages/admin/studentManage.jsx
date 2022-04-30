@@ -1,9 +1,12 @@
 /* eslint no-underscore-dangle: 0 */
 import React, { Component } from 'react';
-import { Table, Pagination, Icon, Message, Button } from '@alifd/next';
+import { Table, Pagination, Icon, Message, Button, Dialog, Input, NumberPicker } from '@alifd/next';
 import { Link } from 'react-router-dom';
 import { getAllStudentInfo } from '@/service/common/api';
+import { walletTopup } from '@/service/admin/api';
+import { getWalletInfo } from '@/service/admin/api';
 import CommonUtil from '@/utils/CommonUtils';
+import Constant from '@/constant';
 
 export default class studentManage extends Component {
   static displayName = 'Student List';
@@ -23,7 +26,9 @@ export default class studentManage extends Component {
         list: [],
       },
       isLoading: false,
+      topupDlgVisible: false,
     };
+    this.currentPage = 1;
   }
 
   componentDidMount() {
@@ -41,7 +46,15 @@ export default class studentManage extends Component {
 
     _this.setLoadingVisible(true);
     const data = await getAllStudentInfo();
+    const wallets = await getWalletInfo();
     if (data != null && data.length > 0) {
+      data.map((item)=>{
+        for(let i in wallets){
+          if(wallets[i].id == item.walletId){
+            item.balance = wallets[i].balance;
+          }
+        }
+      });
       let list = [];
       CommonUtil.ganerateListFromTree(data, list, 1);
       tableData.total = list.length;
@@ -80,17 +93,29 @@ export default class studentManage extends Component {
   renderOperations = (value, index, record) => {
     return (
       <div className="operation-table-operation" style={styles.operationTable}>
-        <Link to={''} className={styles.action}>
+        <Button type="primary" style={styles.button}>
           details
-        </Link>
-        <Button
+        </Button>
+        <Button type="primary"  style={styles.button}
           onClick={() => {
             this.deleteStudent(record.id);
           }}
         >
           delete
         </Button>
-        <Button> deactive </Button>
+        <Button type="primary"  style={styles.button}
+          onClick={() => {
+            //this.deleteStudent(record.id);
+            this.setState({ topupDlgVisible: true });
+            this.selectRecord = record;
+            this.selectIndex = index;
+          }}
+        >
+          topup
+        </Button>
+        <Button type="primary"   style={styles.button} >
+          deactive
+        </Button>
       </div>
     );
   };
@@ -106,10 +131,15 @@ export default class studentManage extends Component {
    */
   onChangePage = (currentPage) => {
     this.fetchStudentListData(currentPage);
+    this.currentPage = currentPage;
   };
 
   render() {
     const { tableData, isLoading } = this.state;
+    function onNumberPickerChange(value) {
+      console.log("changed", value);
+      this.topupValue = value;
+    }
     return (
       <div className="operation-table">
         <Table
@@ -120,14 +150,34 @@ export default class studentManage extends Component {
           hasBorder={false}
         >
           <Table.Column
-            title="Name"
-            dataIndex="name"
-            //cell={this.renderCourseNameTitle}
+            title="Id"
+            dataIndex="id"
             width={200}
             alignHeader="left"
-            align="center"
+            align="left"
           />
-          <Table.Column title="操作" dataIndex="operation" width={150} align="center" cell={this.renderOperations} />
+          <Table.Column
+            title="Account"
+            dataIndex="accountName"
+            width={200}
+            alignHeader="left"
+            align="left"
+          />
+          <Table.Column
+            title="Name"
+            dataIndex="name"
+            width={200}
+            alignHeader="left"
+            align="left"
+          />
+           <Table.Column
+            title="Balance"
+            dataIndex="balance"
+            width={150}
+            alignHeader="left"
+            align="left"
+          />
+          <Table.Column title="Operate" dataIndex="operation" width={250} align="left" cell={this.renderOperations} />
         </Table>
         <div style={styles.paginationContainer}>
           <Pagination
@@ -137,14 +187,41 @@ export default class studentManage extends Component {
             onChange={this.onChangePage}
           />
         </div>
+        <Dialog
+          v2
+          title="Top up"
+          visible={ this.state.topupDlgVisible }
+          onOk={this.topupConfirm.bind(this)}
+          onClose={this.topupCancel.bind(this)}
+        >
+          Input the amount wanna topup:
+          <NumberPicker hasTrigger={false} onChange={onNumberPickerChange.bind(this)} />
+        </Dialog>
       </div>
     );
   }
 
+  async topupConfirm(){
+    const res = await walletTopup(this.selectRecord.walletId,this.topupValue);
+    if(res.code == Constant.RES_SUCCESS){
+      Message.success("top up sucess!");
+      this.fetchStudentListData(this.currentPage);
+    }else{
+      Message.error("top up failed!");
+    }
+    this.setState({ topupDlgVisible:false })
+  }
+  topupCancel(){
+    this.setState({ topupDlgVisible:false })
+  }
   deleteStudent(tutorId) {}
 }
 
 const styles = {
+  button:{
+    marginRight: '5px',
+    marginBottom: '5px',
+  },
   cardContainer: {
     padding: '10px 10px 20px 10px',
   },

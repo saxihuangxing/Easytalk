@@ -2,13 +2,18 @@ let tutorScheme = require("./tutorScheme.js");
 let adminScheme = require("./adminScheme.js");
 let studentScheme = require("./studentScheme.js");
 let lessonScheme = require("./lessonScheme.js");
+let walletScheme = require("./walletScheme.js");
+let topupApplySchema = require("./topupApllySchema.js");
 let Logger = require("../utils/Logger");
 
 class DbOperator {
-  add(params) {
-    //console.log("dbadd:" + JSON.stringify(params) + "  contruct = " + this.Module.constructor);
-    const module = new this.Module(params);
-   /*  return module.save(); */
+  add(params,session) {
+    if(session){
+      return this.Module.create(params, {session: session});
+    }else{
+      return this.Module.create(params);
+    }
+    /*const module = new this.Module(params).session(session);
     return new Promise((resolve, reject) => {
       module.save(function (err, res) {
         if (err) {
@@ -17,7 +22,8 @@ class DbOperator {
           resolve(res);
         }
       });
-    });
+    });*/
+
   }
 
   findLimiteFiledsPromise(query, projection) {
@@ -69,16 +75,19 @@ class DbOperator {
   }
 
   remove(query) {
-    this.Module.remove(query, function (err, res) {
-      if (err) {
-        Logger.error(`db remove ${JSON.stringify(err)}`);
-      } else {
-        //console.log("Res:" + res);
-      }
+    return new Promise((res,rej) => {
+      this.Module.remove(query, function (err, res) {
+        if (err) {
+          Logger.error(`db remove ${JSON.stringify(err)}`);
+          rej(err);
+        } else {
+          res()
+        }
+      });
     });
   }
 
-  updateOne(query, data) {
+  updateOne(query, data, session) {
     return new Promise((resolve, reject) => {
       this.Module.updateOne(query, data, function (err, res) {
         if (err) {
@@ -87,7 +96,7 @@ class DbOperator {
         } else {
           resolve(res);
         }
-      });
+      }).session(session);
     });
   }
 
@@ -159,6 +168,12 @@ module.exports = (moduleType) => {
     case "lesson":
         dbOperator.Module = lessonScheme;
         break;
+    case "wallet":
+        dbOperator.Module = walletScheme;
+        break;
+    case "topupApply":
+        dbOperator.Module = topupApplySchema;
+        break;        
     default:
       dbOperator.Module = tutorScheme;
       break;

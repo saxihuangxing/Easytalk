@@ -40,6 +40,13 @@ const Constant = {
         UNKNOW: -1,
         TimeTooClose: 0,
         LessonInfoError: 1,
+    },
+    walletTransReason:{
+        topup:"Top Up",
+        bookLesson: "Book Lesson",
+        gift: "Gift",
+        cancelLesson: "Cancel Lesson",
+        applyRefund: "Apply Refund",
     }
 }
 

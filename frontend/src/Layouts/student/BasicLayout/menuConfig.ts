@@ -2,20 +2,25 @@ import { SmileOutlined, HeartOutlined } from '@ant-design/icons';
 
 const asideMenuConfig = [
   {
-    name: 'Home',
+    name: '教师列表',
     path: '/home/main',
     icon: SmileOutlined,
   },
   {
-    name: 'Booked Lessons',
+    name: '预订课程',
     path: '/home/bookedLessons',
     icon: SmileOutlined,
   },
   {
-    name: 'History Lessons',
+    name: '历史课程',
     path: '/home/historyLessons',
     icon: SmileOutlined,
-  }
+  },
+  {
+    name: '充值',
+    path: '/home/topup',
+    icon: SmileOutlined,
+  },
 ];
 
 export { asideMenuConfig };
