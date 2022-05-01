@@ -17,6 +17,11 @@ const asideMenuConfig = [
     icon: SmileOutlined,
   },
   {
+    name: '钱包',
+    path: '/home/wallet',
+    icon: SmileOutlined,
+  },
+  {
     name: '充值',
     path: '/home/topup',
     icon: SmileOutlined,

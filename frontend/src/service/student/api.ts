@@ -140,5 +140,15 @@ export async function TopupApply(amount) {
    }
 }
 
+export async function getMyWallet() {
+  try{
+    const response = await Axios.post('/api/student/getMyWallet');
+    const { data } = response;
+    return data; 
+   }catch(err){
+     console.error("getMyWallet err:" + err);
+     return { "code":Constant.RES_FAILED }
+   }
+}
 
 

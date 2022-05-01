@@ -2,8 +2,8 @@ import { SmileOutlined, HeartOutlined } from '@ant-design/icons';
 
 const asideMenuConfig = [
   {
-    name: 'home',
-    path: '/admin/home',
+    name: 'Tutor Manage',
+    path: '/admin/home/tutorManage',
     icon: SmileOutlined,
   },
   {

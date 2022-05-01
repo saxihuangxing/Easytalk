@@ -87,7 +87,7 @@ class DbOperator {
     });
   }
 
-  updateOne(query, data, session) {
+  updateOne(query, data) {
     return new Promise((resolve, reject) => {
       this.Module.updateOne(query, data, function (err, res) {
         if (err) {
@@ -96,7 +96,7 @@ class DbOperator {
         } else {
           resolve(res);
         }
-      }).session(session);
+      })
     });
   }
 

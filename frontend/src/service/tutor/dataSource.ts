@@ -104,3 +104,37 @@ export async function deleteVideo(fileName:string) {
   }
   return null;
 }
+
+export async function getBookedLesson() {
+  try{
+    const response = await Axios.post('/api/tutor/getMyLesson',
+    { query:{ $or: [{ status:Constant.LESSON_STATUS.WAITING },
+      { status:Constant.LESSON_STATUS.TAKING }] }}); 
+    const { data } = response;
+    return data; 
+   }catch(err){
+     return { "code":Constant.RES_FAILED }
+   }
+}
+export async function getHistoryLesson() {
+  try{
+    const response = await Axios.post('/api/tutor/getMyLesson',
+    { query:{ status:Constant.LESSON_STATUS.FINISHED  }}); 
+    const { data } = response;
+    return data; 
+   }catch(err){
+     return { "code":Constant.RES_FAILED }
+   }
+}
+
+export async function getCanceledLesson() {
+  try{
+    const response = await Axios.post('/api/student/getMyLesson',
+    { query:{ $or: [{ status:Constant.LESSON_STATUS.CANCELED },
+      { status:Constant.LESSON_STATUS.REFUND }, { status:Constant.LESSON_STATUS.DISPUTE } ] } });
+    const { data } = response;
+    return data; 
+   }catch(err){
+     return { "code":Constant.RES_FAILED }
+   }
+}

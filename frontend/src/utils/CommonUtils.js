@@ -119,9 +119,16 @@ const CommonUtil = {
               if(pair[0] == variable){return pair[1];}
           }
           return(false);
+      },
+  
+      sortArray: (array, filed, isAscending ) => {
+        array.sort(function(a, b){
+          if(isAscending)
+            return a[filed] - b[filed]
+          else
+           return  b[filed] - a[filed]
+        });   
       }
-  
-  
   }
   
   

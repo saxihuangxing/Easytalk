@@ -25,7 +25,6 @@ export default class studentManage extends Component {
       },
       isLoading: false,
     };
-    this.currentPage = 1;
   }
 
   componentDidMount() {
@@ -42,10 +41,10 @@ export default class studentManage extends Component {
     const tableData = this.state.tableData;
 
     _this.setLoadingVisible(true);
-    const data = await getTopupApplyInfo({ status:'waiting' });
+    const data = await getTopupApplyInfo({},{});
     if (data != null && data.length > 0) {
       let list = [];
-      CommonUtil.ganerateListFromTree(data, list, 1);
+      CommonUtil.ganerateListFromTree(data, list);
       tableData.total = list.length;
       tableData.currentPage = page;
       tableData.org = data;
@@ -82,14 +81,6 @@ export default class studentManage extends Component {
   renderOperations = (value, index, record) => {
     return (
       <div className="operation-table-operation" style={styles.operationTable}>
-        <Button type="primary" style={styles.button} onClick = {(record)=>{ this.topupApprove(record,true)}}>
-          Approve
-        </Button>
-        <Button type="primary"   style={styles.button}
-            onClick = {(record)=>{ this.topupApprove(record,false)}}
-        >
-          Reject
-        </Button>
       </div>
     );
   };
@@ -105,7 +96,6 @@ export default class studentManage extends Component {
    */
   onChangePage = (currentPage) => {
     this.fetchApplytListData(currentPage);
-    this.currentPage = currentPage;
   };
 
   render() {
@@ -157,7 +147,7 @@ export default class studentManage extends Component {
           />
           <Table.Column title="Operate" dataIndex="operation" width={250} align="left" cell={this.renderOperations.bind(this)} />
         </Table>
-        <div style={styles.paginationContainer}>
+        <div style = {styles.paginationContainer}>
           <Pagination
             current={tableData.currentPage}
             pageSize={tableData.pageSize}
@@ -167,16 +157,6 @@ export default class studentManage extends Component {
         </div>
       </div>
     );
-  }
-
-  async topupApprove(record,result:Boolean){
-    const res = await setTopupApplyResult(record.id,result);
-    if(res.code == Constant.RES_SUCCESS){
-      Message.success("operator commit sucess!");
-      this.fetchApplytListData(this.currentPage);
-    }else{
-      Message.error("top up failed!");
-    }
   }
 }
 

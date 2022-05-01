@@ -11,26 +11,28 @@ async function LessonStatusMonitor(){
          { status:Constant.LESSON_STATUS.TAKING }] });
     for(let i in lessons){
         const lesson = lessons[i];
-        const curTime = (new Date().now)/1000/60;
+        const curTime = Date.now()/1000/60;
         if(lesson.status == Constant.LESSON_STATUS.WAITING){
-            const ds = curTime - lesson.lessonTime;
+            const ds =  lesson.lessonTime - curTime;
+            //console.log("ds = " + ds + " lesson.lessonTime = " + lesson.lessonTime + "curTime = " + curTime);
             if(ds >= 0 && ds <=  Config.oneClassTime){
-                dbLesson.updateOne({ lessonId:lesson.lessonId }, { status:Constant.LESSON_STATUS.TAKING });
-                Logger.Info(`lesson ${lesson.lessonId} enter runing status`);        
-            }else if(ds > config.oneClass){
+                await dbLesson.updateOne({ lessonId:lesson.lessonId }, { status:Constant.LESSON_STATUS.TAKING });
+                Logger.info(`lesson ${lesson.lessonId} enter runing status`);        
+            }else if(ds <= 0){
                 dbLesson.updateOne({ lessonId:lesson.lessonId }, { status:Constant.LESSON_STATUS.FINISHED }); 
-                Logger.Info(`lesson ${lesson.lessonId} enter finished status`);    
+                Logger.info(`lesson ${lesson.lessonId} enter finished status`);    
             }       
         }else if(lesson.status == Constant.LESSON_STATUS.TAKING){
             if(curTime > (lesson.lessonTime + Config.oneClassTime)){
                 dbLesson.updateOne({ lessonId:lesson.lessonId }, { status:Constant.LESSON_STATUS.FINISHED }); 
-                Logger.Info(`lesson ${lesson.lessonId} enter finished status`);               
+                Logger.info(`lesson ${lesson.lessonId} enter finished status`);               
             }
         }
     }     
 }
 
 function startLessonMonitor(){
+   LessonStatusMonitor();
    const interval =  setInterval( LessonStatusMonitor, checkInterval );
    return interval;    
 }

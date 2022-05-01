@@ -2,10 +2,10 @@ var mongoose = require('./dbHandle.js'),
     Schema = mongoose.Schema;
 
 var Studentschema = new Schema({
-    id: { type: String },
-    walletId: { type: String },
-    accountName : { type: String },
-    accountPassword: { type: String },
+    id: { type: String, unique:true,required: true },
+    walletId: { type: String, unique:true },
+    accountName : { type: String,required: true },
+    accountPassword: { type: String,required: true },
     status: { type: String },      // 'normal' || 'deactive'    
     name : { type: String },
     residence: { type: String },

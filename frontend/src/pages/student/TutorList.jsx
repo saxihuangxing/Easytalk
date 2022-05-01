@@ -78,7 +78,7 @@ export default class tutorInfo extends React.Component {
   }
 
   fetchAllTutorInfo = async () => {
-    let res = await getAllTutorInfo({});
+    let res = await getAllTutorInfo({status:Constant.TUTOR_STATUS.ACTIVE});
     if (res && res.code === Constant.RES_SUCCESS) {
       if (res.data && res.data.length > 0) {
         this.setState({ data: res.data });

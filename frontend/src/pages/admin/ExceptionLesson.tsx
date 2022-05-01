@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { getLessonInfo } from '@/service/admin/api';
 import CommonUtil from '@/utils/CommonUtils';
 import Constant from '@/constant';
+import moment from 'moment';
     
 export default class TutorManage extends Component {
   static displayName = 'Tutor List';
@@ -43,7 +44,8 @@ export default class TutorManage extends Component {
     const tableData = this.state.tableData;
 
     this.setState({ isLoading: true });
-    const data = await getLessonInfo({ status: Constant.LESSON_STATUS.TAKING });
+    const data = await getLessonInfo({ $or: [{ status:Constant.LESSON_STATUS.CANCELED },
+      { status:Constant.LESSON_STATUS.REFUND },{ status:Constant.LESSON_STATUS.DISPUTE }] }, {});
     if (data != null && data.length > 0) {
       let list = [];
       CommonUtil.ganerateListFromTree(data, list, 1);

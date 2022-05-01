@@ -24,12 +24,14 @@ const mongoose = require('../../dbManage/dbHandle');
     }    
 }); */
 
-const  getRefundAmount =  (cost,lessonDistance) => {
-    cancelLessonRules.forEach((item)=>{
-        if(lessonDistance >= item.time){
-            return cost * item.refundRate;
+const  getRefundAmount =  (lessonDistance) => {
+    const { cancelLessonRules } = Config;
+    for(let i in cancelLessonRules){
+        const rule = cancelLessonRules[i];
+        if(lessonDistance >= rule.time){
+            return rule.refundRate;
         }
-    })
+    }
     return 0;
 }
 
@@ -40,28 +42,28 @@ router.post('/bookLesson', async function(req, res, next) {
             res.send({ code:Constant.RES_FAILED, reson:Constant.Book_FAIL_REASON.DATA_INCOMPELETE  });
             return;      
         }
-        let check =  await CommonUtil.checkTutorStatus(lesson.tutorId,lesson.lessonTime,Constant.SCHEDULE_STATUS.Available);
+        let check =  await CommonUtil.checkTutorStatus(lesson.tutorId, lesson.lessonTime, Constant.SCHEDULE_STATUS.Available);
         if(!check){
             res.send({ code:Constant.RES_FAILED, reson:Constant.Book_FAIL_REASON.TUTOR_UNAVAILABLE  });
             return;    
         }
         const student = await dbStudent.findOneLimiteFiledsPromise({ id:lesson.stuId },{ walletId:1 });
         const wallet = await dbWallet.findOnePromise({ id:student.walletId });
-        if(wallet.balance < config.lessonPrice){
+        if(wallet.balance < Config.lessonPrice){
             res.send({ code:Constant.RES_FAILED, reson:Constant.Book_FAIL_REASON.INSUFFIENT_COIN  });
             return;  
         }
         const lessonId = await CommonUtil.getOnlyId(dbLesson);
         const status = Constant.LESSON_STATUS.WAITING;
-        const cost = config.lessonPrice;
+        const cost = Config.lessonPrice;
         const lessonData = {lessonId,status,cost,...lesson};
-        const tutor =  await dbTutor.findOneLimiteFiledsPromise({id:tutorId},{scheduleMap:1});
-        tutor.scheduleMap.set(lesson.lessonTime.toString(),status);
-        wallet.balance = wallet.balance - config.lessonPrice;
+        const tutor =  await dbTutor.findOneLimiteFiledsPromise({ id:lesson.tutorId }, { scheduleMap:1 });
+        tutor.scheduleMap.set(lesson.lessonTime.toString(), Constant.SCHEDULE_STATUS.BOOKED);
+        wallet.balance = wallet.balance - Config.lessonPrice;
         const transation = {
-            action: true,
+            action: false,
             balance:  wallet.balance,
-            amount: config.lessonPrice,
+            amount: Config.lessonPrice,
             time: Date.now(),
             reason: Constant.walletTransReason.bookLesson,
             refLessonId: lessonId,
@@ -124,16 +126,28 @@ router.post('/cancelLesson', async function(req, res, next) {
             res.send({ code:Constant.RES_FAILED, reson:Constant.CANCEL_LESSON_FAIL_REASON.TimeTooClose  });
             return; 
         }
-        const refundAmount = getRefundAmount(lesson.cost,lessonDistance);
+        const refundRate = getRefundAmount(lessonDistance);
+        const refundAmount = lesson.cost * refundRate;
         if(refundAmount <= 0){
             Logger.error(`can't refund , refundAmount ${refundAmount}`);
             res.send({ code:Constant.RES_FAILED, reson:Constant.CANCEL_LESSON_FAIL_REASON.TimeTooClose  });
             return; 
         }
-        const tutor =  await dbTutor.findOneLimiteFiledsPromise({id:lesson.tutorId},{scheduleMap:1});
-        tutor.scheduleMap.set(lesson.lessonTime.toString(),Constant.LESSON_STATUS.CANCELED);
+        const tutor =  await dbTutor.findOneLimiteFiledsPromise({ id:lesson.tutorId },{scheduleMap:1});
+        tutor.scheduleMap.set(lesson.lessonTime.toString(),Constant.SCHEDULE_STATUS.Available);
         const student = await dbStudent.findOneLimiteFiledsPromise({ id:lesson.stuId },{ walletId:1 });
         const wallet = await dbWallet.findOnePromise({ id:student.walletId });
+        wallet.balance += refundAmount;
+        const transation = {
+            action: true,
+            balance:  wallet.balance,
+            amount: refundAmount,
+            refundRate: refundRate,
+            time: Date.now(),
+            reason: Constant.walletTransReason.cancelLesson,
+            refLessonId: lesson.lessonId,
+        }
+        wallet.transations.unshift(transation);
         lesson.status = Constant.LESSON_STATUS.CANCELED;
        // const session = await mongoose.connection.startSession();
         try{    
@@ -209,6 +223,16 @@ router.post('/topupApply', async function(req, res, next) {
     }
 });
 
+router.post('/getMyWallet', async function(req, res, next) {
+    try{
+        const query = { userId:req.session.userId }
+        const data = await dbWallet.findOneLimiteFiledsPromise(query);
+        res.send({ code:Constant.RES_SUCCESS, data });
+    }catch(err){
+        Logger.error(`getMyWallet err: ${err}`);
+        res.send({ code:Constant.RES_FAILED });
+    }    
+});
 
 
 module.exports = router;

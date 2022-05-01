@@ -12,7 +12,7 @@ const TransactionSchema = new Schema({
 })
 
 const WalletSchema = new Schema({
-    id: { type: String },
+    id: { type: String, unique:true },
     userId: { type: String },
     balance: { type: Number },
     transations: [ TransactionSchema ],

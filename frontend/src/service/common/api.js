@@ -1,9 +1,10 @@
 import Axios from 'axios';
 import Constant from '@/constant';
 
-export async function getAllTutorInfo(projection) {
+export async function getAllTutorInfo(query,projection) {
     const params = {
-      projection
+      projection,
+      query
     };
     const res = await Axios.post('/api/common/getAllTutorInfo',params);
     if(res.status == 200){

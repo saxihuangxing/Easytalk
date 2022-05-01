@@ -42,7 +42,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function (req, res, next) {
     const currPath = req.url;
-    if (currPath == "/user/login"  || currPath == "/user/logout" || currPath == "/user/enroll") {
+    console.log("currPath = " + currPath);
+    if (currPath == "/user/login"  || currPath == "/user/logout" 
+        || currPath == "/user/enroll" || currPath == '/common/getSystemConfig') {
         next();
     } else {
         if (req.session.userId) {

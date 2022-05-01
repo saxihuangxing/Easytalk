@@ -9,6 +9,7 @@ import TutorProfile from '@/pages/student/TutorProfile';
 import StuBookedLesson from '@/pages/student/BookedLesson';
 import StuHistoryLesson from '@/pages/student/HistoryLesson';
 import StuTopup from '@/pages/student/TopUp';
+import StuWallet from '@/pages/student/Wallet';
 import AdminLoginLayout from '@/Layouts/admin/UserLayout';
 import AdminBasicLayout from '@/Layouts/admin/BasicLayout';
 import AdminLogin from '@/pages/admin/UserLogin';
@@ -18,9 +19,9 @@ import AdminBookedLesson from '@/pages/admin/BookLesson';
 import AdminHistoryLesson from '@/pages/admin/HistoryLesson';
 import AdminTopupApply from '@/pages/admin/TopupManange';
 import AdminTopupApplyHistory from '@/pages/admin/topupApplyHistory';
-const Dashboard = lazy(() => import('@/pages/tutor/Dashboard'));
 const Schedule = lazy(() => import('@/pages/tutor/Schedule'));
-const Home = lazy(() => import('@/pages/tutor/Home'));
+const TutorBookedLesson = lazy(() => import('@/pages/tutor/BookedLesson'));
+const TutorHistoryLesson = lazy(() => import('@/pages/tutor/HistoryLesson'));
 const FrontPageHome = lazy(() => import('@/pages/tutor/FrontPage/Home'));
 const Contact = lazy(() => import('@/pages/tutor/FrontPage/Contact'));
 const NotFound = lazy(() => import('@/components/NotFound'));
@@ -30,13 +31,13 @@ const routerConfig: IRouterConfig[] = [
     path: '/tutor',
     children:[
       {
-        path: '/userInfo',
+        path: '/home',
         component: Layout,
         children: [
-          { path: '/', exact: true, component: Home },
-          { path: '/dashboard', component: Dashboard },
+          { path: '/account', exact: true, component: Account },
+          { path: '/bookedLessons', component: TutorBookedLesson },
+          { path: '/historyLessons', component: TutorHistoryLesson },
           { path: '/schedule', component: Schedule },
-          { path: '/account', component: Account },
           { component: NotFound },
         ],
       },
@@ -57,7 +58,7 @@ const routerConfig: IRouterConfig[] = [
         path: '/home',
         component: AdminBasicLayout,
         children: [
-          { path: '/', exact: true, component: TutorManage },
+          { path: '/tutorManage', exact: true, component: TutorManage },
           { path: '/studentMange', exact:true, component: StudentManage},
           { path: '/bookedLesson', exact: true, component: AdminBookedLesson},
           { path: '/historyLesson', exact:true, component: AdminHistoryLesson},
@@ -85,6 +86,7 @@ const routerConfig: IRouterConfig[] = [
           { path: '/bookedLessons', component: StuBookedLesson },
           { path: '/historyLessons', component: StuHistoryLesson },
           { path: '/topup', component: StuTopup},
+          { path: '/wallet', component: StuWallet},
           { path: '/main', component: StudentMainPage() },
         ],
       },

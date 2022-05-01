@@ -3,7 +3,7 @@ const   Schema = mongoose.Schema;
 
 
 const topupApplySchema = new Schema({
-    id: { type: String },
+    id: { type: String, unique:true },
     stuId: { type: String },
     stuName: { type: String },
     walletId: { type: String },

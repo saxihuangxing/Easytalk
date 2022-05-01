@@ -1,5 +1,6 @@
 import { runApp, IAppConfig } from 'ice';
 import '@/utils/HttpConfig';
+import  './service/systemConfig';
 const appConfig: IAppConfig = {
   app: {
     rootId: 'ice-container',
@@ -8,5 +9,6 @@ const appConfig: IAppConfig = {
     type: 'hash',
   },
 };
+
 
 runApp(appConfig);

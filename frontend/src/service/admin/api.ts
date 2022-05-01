@@ -99,3 +99,14 @@ export async function deleteStudent( studentId:string ) {
     return {"code":Constant.RES_FAILED}
   }
 }
+
+export async function setTutorStatus( tutorId:string, status:string ) {
+  try{
+   const response = await Axios.post('/api/admin/setTutorStatus', { tutorId,status }); 
+   const { data } = response;
+   return data; 
+  }catch(err){
+    console.error("setTutorStatus err:",err);
+    return {"code":Constant.RES_FAILED}
+  }
+}

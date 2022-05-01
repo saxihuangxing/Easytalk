@@ -1,5 +1,7 @@
 {
     "lessonPrice" : 25,
+    "oneClassTime": 25,
+    "cancelLessonlimitTime": 10,
     "cancelLessonRules": 
         [
             {
@@ -9,6 +11,10 @@
             {
                 "time": 60, 
                 "refundRate": 0.5 
+            },
+            {
+                "time": 10, 
+                "refundRate": 0.3 
             }
            
         ],
@@ -16,19 +22,19 @@
         [
             {
                 "lessonAmount": 100,
-                "discount": 0.8
+                "discount": 0.2
             },
             {
                 "lessonAmount": 50,
-                "discount": 0.85
+                "discount": 0.15
             },
             {
                 "lessonAmount": 30,
-                "discount": 0.9
+                "discount": 0.1
             },
             {
-                "lessonAmount": 30,
-                "discount": 0.95
+                "lessonAmount": 10,
+                "discount": 0.05
             }
         ],
         "walletInitCoin":0       

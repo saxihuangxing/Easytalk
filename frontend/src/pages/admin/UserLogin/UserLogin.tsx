@@ -47,7 +47,7 @@ const LoginBlock: React.FunctionComponent<LoginProps> = (
     //const history = useHistory();
     if(res.code == CONSTANT.RES_SUCCESS){
       Message.success('login successful');
-      window.location.href = "#/admin/home";   
+      window.location.href = "#/admin/home/tutorManage";   
     //  history.push("/tutor/userInfo"); 
     }else{
       Message.success('Login failed, Username or password error');

@@ -3,7 +3,7 @@ const Constant = {
         CHECKING: 'checking',
         APPROVED: 'approved',
     },
-    ACCOUNT_STATUS:{
+    TUTOR_STATUS:{
         ACTIVE: 'active',
         DEACTIVE: 'deactive',
     },
@@ -21,8 +21,10 @@ const Constant = {
     LESSON_STATUS:{
         WAITING: 'waiting',
         TAKING: 'taking',
-        CANCELED: 'CANCELED',
+        CANCELED: 'canceled',
         FINISHED: 'finished',
+        DISPUTE: 'dispute',
+        REFUND: 'refund',
     },
     SCHEDULE_STATUS:{
         PASSED: -1,

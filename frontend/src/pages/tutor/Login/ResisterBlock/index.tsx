@@ -70,7 +70,7 @@ export default function RegisterBlock() {
     const res:TutorEnrollResult = await tutorEnroll(data);
     if(res.code == CONSTANT.RES_SUCCESS){
       Message.success('register successful');
-      window.location.href = "#/tutor/userInfo";   
+      window.location.href = "#/tutor/home/account";   
     }else{
       let errReason:string = "";
       if(res.reason == CONSTANT.ENROLL_FAIL_REASON.EXIST_USERNAME){

@@ -3,8 +3,9 @@ import React, { Component } from 'react';
 import { Table, Pagination, Icon, Message, Button } from '@alifd/next';
 import { Link } from 'react-router-dom';
 import { getAllTutorInfo } from '@/service/common/api';
+import { setTutorStatus } from '@/service/admin/api';
 import CommonUtil from '@/utils/CommonUtils';
-
+import Constant from '@/constant';
 export default class TutorManage extends Component {
   static displayName = 'Tutor List';
 
@@ -24,6 +25,7 @@ export default class TutorManage extends Component {
       },
       isLoading: false,
     };
+    this.currentPage = 1;
   }
 
   componentDidMount() {
@@ -41,9 +43,13 @@ export default class TutorManage extends Component {
   fetchTutorsListData = async (page) => {
     const _this = this;
     const tableData = this.state.tableData;
-
+    this.currentPage = page;
     _this.setLoadingVisible(true);
-    const data = await getAllTutorInfo();
+    const res = await getAllTutorInfo();
+    let data = null;
+    if (res.code === Constant.RES_SUCCESS) {
+      data = res.data;
+    }
     if (data != null && data.length > 0) {
       let list = [];
       CommonUtil.ganerateListFromTree(data, list, 1);
@@ -81,20 +87,45 @@ export default class TutorManage extends Component {
   };
 
   renderOperations = (value, index, record) => {
+    const nextStatus = record.status == Constant.TUTOR_STATUS.ACTIVE ? 'deactive' : 'active';
     return (
       <div className="operation-table-operation" style={styles.operationTable}>
-        <Link to={''} className={styles.action}>
-          details
-        </Link>
         <Button
+          type="primary"
+          style={styles.button}
+          onClick={() => {
+            
+          }}
+        >
+          details
+        </Button>
+        <Button
+          type="primary"
+          style={styles.button}
           onClick={() => {
             this.deleteTutor(record.tutorId);
           }}
         >
-          {' '}
-          delete{' '}
+          delete
         </Button>
-        <Button> deactive </Button>
+        <Button
+          type="primary"
+          style={styles.button}
+          onClick={async () => {
+            const res = await setTutorStatus(record.id, nextStatus);
+            if(res.code === Constant.RES_SUCCESS){
+              Message.success(`${nextStatus} user success`);
+              const { tableData } = this.state;
+              const indexInList = index + (tableData.currentPage - 1) * tableData.pageSize;
+              tableData.list[indexInList].status = nextStatus;
+              this.setState({ tableData });
+            }else{
+              Message.success(`${nextStatus} user failed`);
+            }
+          }}
+        >
+          {nextStatus}
+        </Button>
       </div>
     );
   };
@@ -123,15 +154,11 @@ export default class TutorManage extends Component {
           style={styles.basicTable}
           hasBorder={false}
         >
-          <Table.Column
-            title="Name"
-            dataIndex="name"
-            width={200}
-            alignHeader="left"
-            align="center"
-          />
-          <Table.Column title="nationality" dataIndex="nationality" width={120} alignHeader="center" align="center" />
-          <Table.Column title="操作" dataIndex="operation" width={150} align="center" cell={this.renderOperations} />
+          <Table.Column title="Id" dataIndex="id" width={100} alignHeader="left" align="left" />
+          <Table.Column title="Name" dataIndex="name" width={100} alignHeader="left" align="left" />
+          <Table.Column title="status" dataIndex="status" width={100} alignHeader="left" align="left" />
+          <Table.Column title="nationality" dataIndex="nationality" width={100} alignHeader="left" align="left" />
+          <Table.Column title="Operator" dataIndex="operation" width={300} alignHeader="center" align="center" cell={this.renderOperations} />
         </Table>
         <div style={styles.paginationContainer}>
           <Pagination
@@ -149,6 +176,10 @@ export default class TutorManage extends Component {
 }
 
 const styles = {
+  button: {
+    marginRight: '5px',
+    marginBottom: '5px',
+  },
   cardContainer: {
     padding: '10px 10px 20px 10px',
   },

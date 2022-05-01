@@ -4,6 +4,7 @@ const Logger = require('../../utils/Logger');
 const tutorDb = require('../../dbManage/dbOperate')('tutor');
 const studentDb = require('../../dbManage/dbOperate')('student');
 const CONSTANT = require('../../constant');
+const fs = require('fs');
 
 router.post('/getAllStudentInfo', async function(req, res, next) {
     const projection = req.body.projection?req.body.projection:{accountPassword:0};
@@ -51,6 +52,17 @@ router.post('/getOneStudentInfo', async function(req, res, next) {
         res.send({ code:CONSTANT.RES_SUCCESS, data });
     }catch(err){
         Logger.error(`getOneStudentInfo err: ${err}`);
+        res.send({ code:CONSTANT.RES_FAILED });  
+    }    
+});
+
+
+router.post('/getSystemConfig', async function(req, res, next) {
+    try{
+        const data = fs.readFileSync(process.cwd() + '/config/config.json', 'utf8')
+        res.send({ code:CONSTANT.RES_SUCCESS, data });
+    }catch(err){
+        Logger.error(`getSystemConfig err: ${err}`);
         res.send({ code:CONSTANT.RES_FAILED });  
     }    
 });

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const Logger = require('../../utils/Logger');
 const dbCol = require('../../dbManage/dbOperate')('tutor');
+const dbLesson = require('../../dbManage/dbOperate')('lesson');
 const CONSTANT = require('../../constant');
 const Constant = require('../../constant');
 const os = require('os');
@@ -35,6 +36,18 @@ router.post('/getTutorInfo', async function(req, res, next) {
     }catch(err){
         Logger.error(`getTutorInfo err: ${err}`);
         res.send({ code:CONSTANT.RES_FAILED });  
+    }
+});
+
+router.post('/getMyLesson', async function(req, res, next) {
+    const query = req.body.query;
+    try{
+        const newQuery = { tutorId:req.session.userId, ...query };
+        const data = await dbLesson.findPromise(newQuery);
+        res.send({ code:Constant.RES_SUCCESS, data });
+    }catch(err){
+        Logger.error(`getBookedLesson err: ${err}`);
+        res.send({ code:Constant.RES_FAILED });
     }
 });
 

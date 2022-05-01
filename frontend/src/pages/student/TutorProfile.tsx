@@ -7,10 +7,9 @@ import CommonUtil from '@/utils/CommonUtils';
 import Config from '@/config/config';
 const maxDays = Config.scheduleMaxDays;
 import moment from 'moment'; 
-import styles from './tutorProfile.module.css';
 import { getMyInfo } from '@/service/student/data';
 import { Slider, Icon } from '@alifd/next';
-import { PhoneTwoTone } from '@ant-design/icons';
+import { getSystemConfig } from '@/service/systemConfig'
 
 // eslint-disable-next-line @iceworks/best-practices/recommend-functional-component
 export default class tutorInfo extends React.Component {
@@ -49,42 +48,6 @@ export default class tutorInfo extends React.Component {
     });
     return result;
   }
-
- /*  renderCell(rowIndex, value, record) {
-    let classStyle;
-    const { scheduleMap } = this.state.data;
-    const available = 'forestgreen';
-    const bookByOthers = 'crimson';
-    const bookBySelf = 'orange';
-    let color = 'grey';
-    const Tags = value.map((ele) => {
-      const status = scheduleMap[ele];
-      const time = moment(parseInt(ele) * 60 * 1000).format('HH:mm');
-      switch (status) {
-        case 1:
-          classStyle = styles.slotAvailable;
-          break;
-        case 2:
-          classStyle = styles.bookedByOthers;
-          break;
-        default:
-          classStyle = styles.slotAvailable;
-          break;
-      }
-      return (
-        <div
-          className={`${styles.slot} ${classStyle}`}
-          onClick={() => {
-            this.setSlot(rowIndex, colIndex, value);
-          }}
-        >
-          {time}
-        </div>
-      );
-    });
-    return (<div>{Tags}</div>);
-  } */
-
     renderCell(rowIndex, value, record) {
        const { scheduleMap } = this.state.data;
        let color = 'grey'; 
@@ -117,8 +80,9 @@ export default class tutorInfo extends React.Component {
         );
       } 
 
-  render() {
+    render() {
     const { data } = this.state;
+    const { lessonPrice } =  getSystemConfig();
     const timeArea = Intl.DateTimeFormat().resolvedOptions().timeZone;
     if (!data) {
       return <div>'unknown tutor'</div>;
@@ -170,7 +134,7 @@ export default class tutorInfo extends React.Component {
           onOk={this.dlgConfirm.bind(this)}
           onClose={this.dlgCancel.bind(this)}
         >
-          <p>Book This Lesson will Spend twenty coins</p>
+          <p>预订本次课程将花费 ${lessonPrice} 金币</p>
         </Dialog>
       </div>
     );

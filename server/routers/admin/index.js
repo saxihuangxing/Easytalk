@@ -4,18 +4,19 @@ const Logger = require('../../utils/Logger');
 const tutorDb = require('../../dbManage/dbOperate')('tutor');
 const walletDb = require('../../dbManage/dbOperate')('wallet');
 const studentDb = require('../../dbManage/dbOperate')('stusdent');
+const lessonDb = require('../../dbManage/dbOperate')('lesson');
 const CONSTANT = require('../../constant');
 const dbTopupApply = require('../../dbManage/dbOperate')('topupApply');
 
-router.post('/setTutorApplyResult', async function(req, res, next) {
-    const tutorId = req.body.tutorId;
-/* try{
-        const data = await studentDb.findLimiteFiledsPromise(query,projection);
-        res.send({ code:CONSTANT.RES_SUCCESS, data });
+router.post('/setTutorStatus', async function(req, res, next) {
+    const { tutorId, status } = req.body;
+    try{
+        await tutorDb.updateOne({ id:tutorId }, { status });
+        res.send({ code:CONSTANT.RES_SUCCESS });  
     }catch(err){
-        Logger.error(`student getAllTutorInfo err: ${err}`);
+        Logger.error(`setTutorStatus err: ${err}`);
         res.send({ code:CONSTANT.RES_FAILED });  
-    } */
+    }
 });
 
 router.post('/deleteStudent', async function(req, res, next) {
@@ -28,13 +29,6 @@ router.post('/deleteStudent', async function(req, res, next) {
         Logger.error(`deleteStudent err: ${err}`);
         res.send({ code:CONSTANT.RES_FAILED });  
     }
-/* try{
-        const data = await studentDb.findLimiteFiledsPromise(query,projection);
-        res.send({ code:CONSTANT.RES_SUCCESS, data });
-    }catch(err){
-        Logger.error(`student getAllTutorInfo err: ${err}`);
-        res.send({ code:CONSTANT.RES_FAILED });  
-    } */
 });
 
 const topupWallet = async (walletId,amount) => {
@@ -72,6 +66,18 @@ router.post('/getWalletInfo', async function(req, res, next) {
     const query = req.body.query?req.body.query:{};
     try{
         const data = await walletDb.findLimiteFiledsPromise(query,projection);
+        res.send({ code:CONSTANT.RES_SUCCESS, data });
+    }catch(err){
+        Logger.error(`getWalletInfo err: ${err}`);
+        res.send({ code:CONSTANT.RES_FAILED });  
+    }    
+});
+
+router.post('/getLessonInfo', async function(req, res, next) {
+    const projection = req.body.projection;
+    const query = req.body.query?req.body.query:{};
+    try{
+        const data = await lessonDb.findLimiteFiledsPromise(query,projection);
         res.send({ code:CONSTANT.RES_SUCCESS, data });
     }catch(err){
         Logger.error(`getWalletInfo err: ${err}`);
