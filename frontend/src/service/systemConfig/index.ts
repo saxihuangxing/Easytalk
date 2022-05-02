@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import Constant from '@/constant';
-
-let systemConfig = null;
+import config from '@/config/systemConfig';
+let systemConfig = config;
 async function initSystemConfig(){
     const res = await Axios.post('/api/common/getSystemConfig');
     if(res.status == 200){
