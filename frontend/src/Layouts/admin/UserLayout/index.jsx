@@ -31,7 +31,7 @@ const styles = {
     width: '100wh',
     minWidth: '1200px',
     height: '100vh',
-    backgroundImage:`url(bg.png)`,
+    backgroundImage:`url('bg.png')`,
     backgroundSize: '100% 100%',
     display: 'flex',
     flexDirection: 'column',

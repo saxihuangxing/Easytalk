@@ -42,21 +42,23 @@ export default class Topup extends React.Component {
     }
 
     async confirmTopup(){
-        const res = await TopupApply(this.state.totalCoins);
-        if(res.code == Constant.RES_SUCCESS){
-           message.success('充值申请已提交，请等待管理员确认') 
-        }else{
-           message.error('充值申请提交失败，请联系管理员处理') 
+        if (confirm('确认已将所需金额成功转账到管理员账号?')) {
+            const res = await TopupApply(this.state.totalCoins);
+            if(res.code == Constant.RES_SUCCESS){
+                message.success('充值申请已提交，请等待管理员确认') 
+            }else{
+                message.error('充值申请提交失败，请联系管理员处理') 
+            }
         }
     }
 
     render() {
-        const { lessonPrice, discountRules } =  getSystemConfig();
+        const { lessonPrice, discountRules, oneClassTime } =  getSystemConfig();
         let discountText = "优惠规则:"
         for(let i in discountRules){
             const times =  discountRules[i].lessonAmount;
             const discount = discountRules[i].discount;
-            discountText += `${i+1}:购买${times}次课程以上，优惠${discount*100}%。`;
+            discountText += `${parseInt(i)+1}:购买${times}次课程以上，优惠${discount*100}%;`;
         }
 
         const { totalPrice, lessonTimes, totalCoins, discount } = this.state;
@@ -67,10 +69,11 @@ export default class Topup extends React.Component {
                     <Card.Divider />
                     <Card.Content>
                         <Form.Item colSpan={4} label="规则">
-                            <span>
-                                要充值的朋友请先扫描加我微信。 请先通过微信付款后点击确认，我看到后会第一时间确认您的充值。
+                            <div>
+                                要充值的朋友请先扫描加我微信，方便今后更好的为您服务，买课流程：输入需要买课的次数，然后转账优惠后金额到我的微信，转账时如需验证姓名输入(黄新)，我看到后会第一时间确认您的充值,
+                                到账后您可以在钱包中看到记录。
                                 {discountText}
-                            </span>
+                            </div>
                         </Form.Item>
                         <Form.Item colSpan={4} label="扫描加我微信:" style={{ display: 'inline-block' }}>
                                  <img style={{ width:'200px',height:'200px' }} src='/qrcode/wechat_add.jpg' />
@@ -79,12 +82,17 @@ export default class Topup extends React.Component {
                                  <img style={{ width:'168px',height:'230px' }} src='/qrcode/wechat_pay.jpg' />
                         </Form.Item>
                         <Form.Item colSpan={4} label="购买">
-                            <span> 单次课程价格:{lessonPrice}元</span>
+                            <span> 单次课程时间{oneClassTime}分钟，价格:{lessonPrice}元</span> 
+                            <br/>
                             <span> 购买课程次数: </span>
-                            <NumberPicker onChange={this.onNumberPickerChange.bind(this)} hasTrigger={false} />
-                            <span> 所需总金额:{totalPrice}元 </span>
-                            <span> 获得金币数量:{totalCoins} </span>
+                            <NumberPicker onChange={this.onNumberPickerChange.bind(this)} step={1} defaultValue={1} min={1} max={1000} hasTrigger={false} />
+                            <br/>
                             <span> 当前优惠:{discount*100}% </span>
+                            <br/>
+                            <span> 原价{totalCoins}, 优惠后金额:{totalPrice}元 </span>
+                             <br/>
+                            <span> 获得金币数量:{totalCoins} </span>
+                            <br/>      
                         </Form.Item>                       
                         <Button type="primary" onClick={this.confirmTopup.bind(this)}>
                             确认充值

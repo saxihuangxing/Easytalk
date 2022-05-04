@@ -1,5 +1,5 @@
 {
-    "lessonPrice" : 25,
+    "lessonPrice" : 20,
     "oneClassTime": 25,
     "cancelLessonlimitTime": 10,
     "cancelLessonRules": 
@@ -22,15 +22,15 @@
         [
             {
                 "lessonAmount": 100,
-                "discount": 0.2
-            },
-            {
-                "lessonAmount": 50,
                 "discount": 0.15
             },
             {
-                "lessonAmount": 30,
+                "lessonAmount": 50,
                 "discount": 0.1
+            },
+            {
+                "lessonAmount": 30,
+                "discount": 0.08
             },
             {
                 "lessonAmount": 10,

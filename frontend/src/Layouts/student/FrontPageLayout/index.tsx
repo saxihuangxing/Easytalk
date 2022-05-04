@@ -6,7 +6,6 @@ const { Item } = Nav;
 const header = <span className={styles.fusion}>Easy Talk</span>;
 const footer = <a> <SignIn /> <Aplly /> </a>;
 
-//const backgroundImage = require('../../images/bg.png');
 const FrontpageLayout = ({ childrens, location }) => {
   return (
     <div>

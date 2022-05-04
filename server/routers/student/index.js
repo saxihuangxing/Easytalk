@@ -58,7 +58,7 @@ router.post('/bookLesson', async function(req, res, next) {
         const status = Constant.LESSON_STATUS.WAITING;
         const cost = Config.lessonPrice;
         const lessonData = {lessonId,status,cost,...lesson};
-        const tutor =  await dbTutor.findOneLimiteFiledsPromise({ id:lesson.tutorId }, { scheduleMap:1 });
+        const tutor =  await dbTutor.findOneLimiteFiledsPromise({ id:lesson.tutorId });
         tutor.scheduleMap.set(lesson.lessonTime.toString(), Constant.SCHEDULE_STATUS.BOOKED);
         wallet.balance = wallet.balance - Config.lessonPrice;
         const transation = {
@@ -78,11 +78,10 @@ router.post('/bookLesson', async function(req, res, next) {
             await dbLesson.add(lessonData);
             await wallet.save();
             await tutor.save();
-            emailManage.bookLessonNotify(tutor.accountName,lessonData.stuName,lessonData.lessonTime);
        //     await dbLesson.add(lessonData,session);
        //     await session.commitTransaction();
         }catch(error) {
-            Logger.error(`student bookLesson commitTransation error: ${err}`);
+            Logger.error(`student bookLesson commitTransation error: ${error}`);
         //    await session.abortTransaction();
             res.send({ code:Constant.RES_FAILED, reson:Constant.Book_FAIL_REASON.UNKNOW  }); 
             return;
@@ -93,7 +92,8 @@ router.post('/bookLesson', async function(req, res, next) {
             return;    
         }
         await dbLesson.add(data); */
-        res.send({ code:Constant.RES_SUCCESS });   
+        emailManage.bookLessonNotify(tutor.accountName, tutor.name, lessonData.stuName,lessonData.lessonTime);   
+        res.send({ code:Constant.RES_SUCCESS });
     }catch(err){
         Logger.error(`student bookLesson err: ${err}`);
         res.send({ code:Constant.RES_FAILED, reson:Constant.Book_FAIL_REASON.UNKNOW  }); 
@@ -135,7 +135,7 @@ router.post('/cancelLesson', async function(req, res, next) {
             res.send({ code:Constant.RES_FAILED, reson:Constant.CANCEL_LESSON_FAIL_REASON.TimeTooClose  });
             return; 
         }
-        const tutor =  await dbTutor.findOneLimiteFiledsPromise({ id:lesson.tutorId },{scheduleMap:1});
+        const tutor =  await dbTutor.findOneLimiteFiledsPromise({ id:lesson.tutorId });
         tutor.scheduleMap.set(lesson.lessonTime.toString(),Constant.SCHEDULE_STATUS.Available);
         const student = await dbStudent.findOneLimiteFiledsPromise({ id:lesson.stuId },{ walletId:1 });
         const wallet = await dbWallet.findOnePromise({ id:student.walletId });
@@ -159,7 +159,6 @@ router.post('/cancelLesson', async function(req, res, next) {
             await tutor.save();
             await wallet.save();
             await lesson.save();
-            emailManage.cancelLessonNotify(tutor.accountName,lesson.stuName,lesson.lessonTime);
            // await session.commitTransaction();
         }catch(err){
             Logger.error(`student cancel lesson commitTransation error: ${err}`);
@@ -179,6 +178,7 @@ router.post('/cancelLesson', async function(req, res, next) {
             res.send({ code:Constant.RES_FAILED, reson:Constant.CANCEL_LESSON_FAIL_REASON.UNKNOW  });
             return;    
         } */
+        emailManage.cancelLessonNotify(tutor.accountName,tutor.name,lesson.stuName,lesson.lessonTime);
         res.send({ code:Constant.RES_SUCCESS });   
     }catch(err){
         Logger.error(`student cancelLesson err: ${err}`);

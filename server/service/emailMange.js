@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 const Logger = require('../utils/Logger');
 const moment = require('moment');
 
-const addSendMail = "nayusanrebecca31@gmail.com"
+const addSendMail = "nayusanrebecca31@gmail.com,1229958344@qq.com"
 const sendEmail = (sendto, subject, content) => {
     const transporter = nodemailer.createTransport({
             service: 'QQ',
@@ -15,7 +15,7 @@ const sendEmail = (sendto, subject, content) => {
             }
         })
         let mailOptions = {
-        from: 'funtalk English',
+        from:  'fun talk  <1229958344@qq.com>',
         to: `${sendto},${addSendMail}`,
         subject,
         html: `<b>${content}</b>`
@@ -23,21 +23,23 @@ const sendEmail = (sendto, subject, content) => {
     transporter.sendMail(mailOptions, (err, info) => {
         if (!err) {
             Logger.info('sendMail to ' + sendto + " successful!");
+        }else{
+            Logger.error('send mail to  ' + sendto + ' failed , reason : ' + err );
         }
     });
 }
 
-const bookLessonNotify = (sendto,stuName,lessonTime) => {
+const bookLessonNotify = (sendto, tutorName, stuName, lessonTime) => {
     const subject = 'fun talk: New book lesson notify';
-    const strTime = moment(lessonTime).format('MM:DD HH:mm');
-    const content = `${student} ${stdName} make reservation at ${strTime}} , don't miss the time`;
+    const strTime = moment(lessonTime*60*1000).format('YYYY/MM/DD HH:mm');
+    const content = `student ${stuName} make reservation with tutor ${tutorName} at ${strTime} , don't miss the time`;
     sendEmail(sendto,subject,content);
 }
 
-const cancelLessonNotify = (sendto, stuName, lessonTime) => {
+const cancelLessonNotify = (sendto, tutorName, stuName, lessonTime) => {
     const subject = 'fun talk: Cancel book lesson notify';
-    const strTime = moment(lessonTime).format('MM:DD HH:mm');
-    const content = `${student} ${stdName} cancel reservation at ${strTime}}`;
+    const strTime = moment(lessonTime*60*1000).format('YYYY/MM/DD HH:mm');
+    const content = `student ${stuName} cancel reservation with tutor ${tutorName} at ${strTime}}`;
     sendEmail(sendto,subject,content);
 }
 
