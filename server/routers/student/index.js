@@ -9,6 +9,7 @@ const dbTopupApply = require('../../dbManage/dbOperate')('topupApply');
 const Constant = require('../../constant');
 const Config = require('../../config/config');
 const CommonUtil = require('../../utils/common');
+const emailManage = require('../../service/emailMange');
 const { constants } = require('crypto');
 const mongoose = require('../../dbManage/dbHandle');
 
@@ -77,6 +78,7 @@ router.post('/bookLesson', async function(req, res, next) {
             await dbLesson.add(lessonData);
             await wallet.save();
             await tutor.save();
+            emailManage.bookLessonNotify(tutor.accountName,lessonData.stuName,lessonData.lessonTime);
        //     await dbLesson.add(lessonData,session);
        //     await session.commitTransaction();
         }catch(error) {
@@ -157,6 +159,7 @@ router.post('/cancelLesson', async function(req, res, next) {
             await tutor.save();
             await wallet.save();
             await lesson.save();
+            emailManage.cancelLessonNotify(tutor.accountName,lesson.stuName,lesson.lessonTime);
            // await session.commitTransaction();
         }catch(err){
             Logger.error(`student cancel lesson commitTransation error: ${err}`);
