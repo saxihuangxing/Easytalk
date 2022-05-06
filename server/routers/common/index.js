@@ -67,4 +67,25 @@ router.post('/getSystemConfig', async function(req, res, next) {
     }    
 });
 
+router.post('/modifyPassword', async function(req, res, next) {
+    const params = req.body.params;
+    const db = require('../../dbManage/dbOperate')(params.role);
+    try{
+        const query = { accountName:params.accountName, accountPassword:params.oldPsw };
+        const data = await db.findOneLimiteFiledsPromise(query);
+        if(data){
+            data.accountPassword = params.newPsw;
+            await data.save();
+            res.send({ code:CONSTANT.RES_SUCCESS });
+            return;
+        }     
+    }catch(err){
+        Logger.error(`modifyPassword err: ${err}`);
+        res.send({ code:CONSTANT.RES_FAILED }); 
+        return; 
+    }
+    res.send({ code:CONSTANT.RES_FAILED }); 
+});
+
+
 module.exports = router;

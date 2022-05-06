@@ -62,7 +62,7 @@ router.post('/enroll', async function(req, res, next) {
             const walletId = await getOnlyId(dbWallet);
             const walletData = {id: walletId, userId : id, balance:config.walletInitCoin};
             const data = { id, accountName:param.accountName, accountPassword: param.accountPassword,
-                walletId }; 
+                walletId, name:param.name }; 
             const session = await mongoose.startSession()
             session.startTransaction();
             try{    

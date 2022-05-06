@@ -52,10 +52,10 @@ export default function RegisterBlock() {
 
   const checkPass = (rule: any, values: string, callback: (errors?: string) => void) => {
     if(values.length < 6){
-      return callback('the password length must over 6');
+      return callback('密码长度必须大于6位');
     }
     else if (values && values !== postData.password) {
-      return callback('the password not correspond');
+      return callback('再次输入密码不一致');
     } 
     else {
       return callback();
@@ -87,7 +87,7 @@ export default function RegisterBlock() {
   return (
     <div className={styles.RegisterBlock}>
       <div className={styles.innerBlock}>
-        <p className={styles.desc}>Register account</p>
+        <p className={styles.desc}>注册新用户</p>
 
         <Form value={postData} onChange={formChange} size="large">
         <Item format="tel" required requiredMessage="必填" asterisk={false}>
@@ -133,7 +133,7 @@ export default function RegisterBlock() {
               name="password"
               size="large"
               htmlType="password"
-              placeholder="at least six password，distinguish captal and small letter"
+              placeholder="最少六位,区分大小写"
             />
           </Item>
           <Item required requiredTrigger="onFocus" requiredMessage="neccessary" validator={checkPass}>
@@ -141,14 +141,14 @@ export default function RegisterBlock() {
               name="rePassword"
               size="large"
               htmlType="password"
-              placeholder="confirm password"
+              placeholder="确认密码"
             />
           </Item>
-          <Item required requiredTrigger="onFocus" requiredMessage="neccessary">
+          <Item required requiredTrigger="onFocus"  requiredMessage="neccessary">
             <Input
               name="name"
               size="large"
-              placeholder="name"
+              placeholder="请使用英语名或拼音字母方便外教老师"
             />
           </Item>
           <Item>
@@ -158,7 +158,7 @@ export default function RegisterBlock() {
               className={styles.submitBtn}
               validate
             >
-              Register Account
+              确认注册
             </Form.Submit>
           </Item>
         </Form>

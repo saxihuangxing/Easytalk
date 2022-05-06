@@ -67,17 +67,17 @@ const LoginBlock: React.FunctionComponent<LoginProps> = (
       return;
     }
     console.log('values:', values);
-    const data:StudentStructure = { accountName:values.name, accountPassword:values.password }; 
+    const data: StudentStructure = { accountName: values.name, accountPassword: values.password };
     const res = await login(data);
     //const history = useHistory(); 
-    if(res.code == CONSTANT.RES_SUCCESS){
+    if (res.code == CONSTANT.RES_SUCCESS) {
       Message.success('login successful');
-      window.location.href = "#/home/main";   
-    //  history.push("/tutor/userInfo"); 
-    }else{
+      window.location.href = "#/home/main";
+      //  history.push("/tutor/userInfo"); 
+    } else {
       Message.error('Login failed, Username or password error');
     }
-  
+
   };
 
 
@@ -86,22 +86,22 @@ const LoginBlock: React.FunctionComponent<LoginProps> = (
       <div className={styles.innerBlock}>
         <Form value={postData} onChange={formChange} size="large">
           <Item required requiredMessage="neccesary">
-            <Input name="name" maxLength={20} placeholder="UserName" />
+            <Input name="name" maxLength={20} placeholder="手机号" />
           </Item>
           <Item required requiredMessage="neccesary" style={{ marginBottom: 0 }}>
-            <Input.Password name="password" htmlType="password" placeholder="Password" />
+            <Input.Password name="password" htmlType="password" placeholder="密码" />
           </Item>
           <div className={styles.infoLine}>
             <Item style={{ marginBottom: 0 }}>
               <Checkbox name="autoLogin" className={styles.infoLeft}>
-                auto login
+                自动登录
               </Checkbox>
             </Item>
-            <div>
+            {/*             <div>
               <a href="/" className={styles.link}>
                 forget password
               </a>
-            </div>
+            </div> */}
           </div>
 
           <Item style={{ marginBottom: 10 }}>
@@ -111,7 +111,7 @@ const LoginBlock: React.FunctionComponent<LoginProps> = (
               className={styles.submitBtn}
               validate
             >
-              Login
+              登录
             </Form.Submit>
           </Item>
         </Form>

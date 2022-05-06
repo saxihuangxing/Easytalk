@@ -10,6 +10,7 @@ import StuBookedLesson from '@/pages/student/BookedLesson';
 import StuHistoryLesson from '@/pages/student/HistoryLesson';
 import StuTopup from '@/pages/student/TopUp';
 import StuWallet from '@/pages/student/Wallet';
+import StuAccount from '@/pages/student/Account';
 import AdminLoginLayout from '@/Layouts/admin/UserLayout';
 import AdminBasicLayout from '@/Layouts/admin/BasicLayout';
 import AdminLogin from '@/pages/admin/UserLogin';
@@ -85,8 +86,9 @@ const routerConfig: IRouterConfig[] = [
           { path: '/tutorDetail', component: TutorProfile },  
           { path: '/bookedLessons', component: StuBookedLesson },
           { path: '/historyLessons', component: StuHistoryLesson },
-          { path: '/topup', component: StuTopup},
-          { path: '/wallet', component: StuWallet},
+          { path: '/topup', component: StuTopup },
+          { path: '/wallet', component: StuWallet },
+          { path: '/account', component: StuAccount },
           { path: '/main', component: StudentMainPage() },
         ],
       },

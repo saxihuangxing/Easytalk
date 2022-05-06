@@ -26,6 +26,11 @@ const asideMenuConfig = [
     path: '/home/topup',
     icon: SmileOutlined,
   },
+  {
+    name: '账号',
+    path: '/home/account',
+    icon: SmileOutlined,
+  },
 ];
 
 export { asideMenuConfig };

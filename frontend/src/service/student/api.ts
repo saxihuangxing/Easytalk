@@ -31,6 +31,7 @@ export async function enroll( values:StudentStructure ) {
   const params = {
     accountName,
     accountPassword,
+    name: values.name,
     role:Constant.ROLE.STUDENT,
   };
   try{
