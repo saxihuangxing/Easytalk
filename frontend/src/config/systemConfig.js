@@ -1,5 +1,6 @@
 const systemConfig = {
-    "lessonPrice" : 20,
+    "lessonPrice" : 100,
+    "coinRate": 5,
     "oneClassTime": 25,
     "cancelLessonlimitTime": 10,
     "cancelLessonRules": 

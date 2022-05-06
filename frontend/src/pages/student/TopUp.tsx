@@ -10,6 +10,7 @@ export default class Topup extends React.Component {
         super(props);
         this.state = {
             totalPrice:0,        //unit RMB
+            discountPrice:0,
             lessonTimes:0,
             totalCoins:0,
             discount:0,
@@ -21,12 +22,13 @@ export default class Topup extends React.Component {
 
     componentDidMount() {
         console.log('search >>> componentDidMount');
+        this.onNumberPickerChange(1);
     }
 
     onNumberPickerChange(value) {
         const state = this.state;
         const systemConfig =  getSystemConfig();
-        const { discountRules, lessonPrice } = systemConfig;
+        const { discountRules, lessonPrice, coinRate } = systemConfig;
         let discount = 0;
         for(let i in discountRules){
             if(value >= discountRules[i].lessonAmount){
@@ -37,7 +39,8 @@ export default class Topup extends React.Component {
         state.lessonTimes = value;
         state.totalCoins = value  * lessonPrice;
         state.discount = discount;
-        state.totalPrice = state.totalCoins * (1 - discount);
+        state.totalPrice = state.totalCoins/coinRate;
+        state.discountPrice = state.totalPrice * (1 - discount);
         this.setState({ state });
     }
 
@@ -53,7 +56,7 @@ export default class Topup extends React.Component {
     }
 
     render() {
-        const { lessonPrice, discountRules, oneClassTime } =  getSystemConfig();
+        const { lessonPrice, discountRules, oneClassTime, coinRate } =  getSystemConfig();
         let discountText = "优惠规则:"
         for(let i in discountRules){
             const times =  discountRules[i].lessonAmount;
@@ -61,7 +64,7 @@ export default class Topup extends React.Component {
             discountText += `${parseInt(i)+1}:购买${times}次课程以上，优惠${discount*100}%;`;
         }
 
-        const { totalPrice, lessonTimes, totalCoins, discount } = this.state;
+        const { totalPrice, lessonTimes, totalCoins, discount, discountPrice } = this.state;
         return (
             <div>
                 <Card free>
@@ -82,14 +85,14 @@ export default class Topup extends React.Component {
                                  <img style={{ width:'168px',height:'230px' }} src='/qrcode/wechat_pay.jpg' />
                         </Form.Item>
                         <Form.Item colSpan={4} label="购买">
-                            <span> 单次课程时间{oneClassTime}分钟，价格:{lessonPrice}元</span> 
+                            <span> 单次课程时间{oneClassTime}分钟，价格:{lessonPrice}金币({lessonPrice/coinRate}RMB),1 RMB 等于 {coinRate} 金币</span> 
                             <br/>
                             <span> 购买课程次数: </span>
                             <NumberPicker onChange={this.onNumberPickerChange.bind(this)} step={1} defaultValue={1} min={1} max={1000} hasTrigger={false} />
                             <br/>
                             <span> 当前优惠:{discount*100}% </span>
                             <br/>
-                            <span> 原价{totalCoins}, 优惠后金额:{totalPrice}元 </span>
+                            <span> 原价{totalPrice}, 优惠后金额:{discountPrice}元,平均每节课{discountPrice/lessonTimes}RMB </span>
                              <br/>
                             <span> 获得金币数量:{totalCoins} </span>
                             <br/>      
