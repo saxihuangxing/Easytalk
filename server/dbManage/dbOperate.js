@@ -27,7 +27,8 @@ class DbOperator {
   }
 
   findLimiteFiledsPromise(query, projection) {
-    return new Promise((resolve, reject) => {
+    return  this.Module.find(query, projection);
+/*     return new Promise((resolve, reject) => {
       this.Module.find(query, projection, (err, res) => {
         if (err) {
           reject(err);
@@ -35,11 +36,12 @@ class DbOperator {
           resolve(res);
         }
       });
-    });
+    }); */
   }
 
   findOneLimiteFiledsPromise(query, projection) {
-    return new Promise((resolve, reject) => {
+    return  this.Module.findOne(query, projection);
+   /*  return new Promise((resolve, reject) => {
       this.Module.findOne(query, projection, (err, res) => {
         if (err) {
           reject(err);
@@ -47,31 +49,7 @@ class DbOperator {
           resolve(res);
         }
       });
-    });
-  }
-
-  findPromise(query) {
-    return new Promise((resolve, reject) => {
-      this.Module.find(query, (err, res) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(res);
-        }
-      });
-    });
-  }
-
-  findOnePromise(query) {
-    return new Promise((resolve, reject) => {
-      this.Module.findOne(query, (err, res) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(res);
-        }
-      });
-    });
+    }); */
   }
 
   remove(query) {

@@ -9,9 +9,9 @@ const config  = {
     server:{
         port:8890, 
     },
-    dbUrl : 'mongodb://106.52.36.117:27017/funtalk',
-
-   // dbUrl : 'mongodb://106.52.36.117:27021,106.52.36.117:27022/funtalk?replicaSet=dbrs', 
+  //  dbUrl : 'mongodb://roselyn:roselyn520@106.52.36.117:27017/admin',
+  //  dbUrl : 'mongodb://106.52.36.117:27017/funtalk?replicaSet=rs0', 
+    dbUrl : 'mongodb://106.52.36.117:27021,106.52.36.117:27022,106.52.36.117:27023/funtalk?replicaSet=dbrs', 
     log : {
         "filename": "/var/log/funtalk_backend.log",
         "level": "verbose"

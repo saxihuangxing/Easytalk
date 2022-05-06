@@ -20,7 +20,7 @@ router.post('/login', async function(req, res, next) {
     const param = req.body;
     const dbCol = require('../../dbManage/dbOperate')(param.role);
     try{
-        const data = await dbCol.findOnePromise({ accountPassword:param.accountPassword,accountName:param.accountName }); 
+        const data = await dbCol.findOneLimiteFiledsPromise({ accountPassword:param.accountPassword,accountName:param.accountName }); 
         if(data){
             req.session.userId = data.id;
             req.session.role = param.role;
@@ -63,22 +63,20 @@ router.post('/enroll', async function(req, res, next) {
             const walletData = {id: walletId, userId : id, balance:config.walletInitCoin};
             const data = { id, accountName:param.accountName, accountPassword: param.accountPassword,
                 walletId }; 
-           // const session = await mongoose.startSession()
-           // session.startTransaction();
+            const session = await mongoose.startSession()
+            session.startTransaction();
             try{    
-                  await dbWallet.add(walletData);
-                  await dbStudent.add(data);
-             //   await dbWallet.add([walletData],session);
-             //   await dbStudent.add([data],session);
-              //  await session.commitTransaction();
+                await dbWallet.add([walletData],session);
+                await dbStudent.add([data],session);
+                await session.commitTransaction();
             }catch(err){
                 Logger.error(`enroll student commitTransation error: ${err}`);
-               // await session.abortTransaction();
+                await session.abortTransaction();
                 res.send({ code:CONSTANT.RES_FAILED, reson:CONSTANT.Book_FAIL_REASON.UNKNOW  }); 
-            //    session.endSession();
+                session.endSession();
                 return;
             } 
-          //  session.endSession();     
+            session.endSession();     
         }else{
             res.send({ "code":CONSTANT.RES_FAILED, reason:ENROLL_FAIL_REASON.WRONG_ROLE });
             return;

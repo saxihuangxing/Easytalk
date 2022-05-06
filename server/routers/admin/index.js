@@ -32,7 +32,7 @@ router.post('/deleteStudent', async function(req, res, next) {
 });
 
 const topupWallet = async (walletId,amount) => {
-    const wallet = await walletDb.findOnePromise({ id:walletId });
+    const wallet = await walletDb.findOneLimiteFiledsPromise({ id:walletId });
     if(!wallet){
         res.send({ code:CONSTANT.RES_FAILED, reason: "can't find wallet" });
         return; 
@@ -102,7 +102,7 @@ router.post('/dealTopupApply', async function(req, res, next) {
     const approve = req.body.approve;
     const query = { id:req.body.id }
     try{
-        const apply = await dbTopupApply.findOnePromise(query);
+        const apply = await dbTopupApply.findOneLimiteFiledsPromise(query);
         apply.status = approve? "approved":"reject";
         if(approve){
             await topupWallet(apply.walletId,apply.amount);     

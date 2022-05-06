@@ -7,7 +7,7 @@ const { config } = require('winston');
 const checkInterval = 60 * 1000;
 
 async function LessonStatusMonitor(){
-    const lessons = await dbLesson.findPromise({ $or: [{ status:Constant.LESSON_STATUS.WAITING },
+    const lessons = await dbLesson.findLimiteFiledsPromise({ $or: [{ status:Constant.LESSON_STATUS.WAITING },
          { status:Constant.LESSON_STATUS.TAKING }] });
     for(let i in lessons){
         const lesson = lessons[i];

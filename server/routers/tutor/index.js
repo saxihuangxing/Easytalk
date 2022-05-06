@@ -43,7 +43,7 @@ router.post('/getMyLesson', async function(req, res, next) {
     const query = req.body.query;
     try{
         const newQuery = { tutorId:req.session.userId, ...query };
-        const data = await dbLesson.findPromise(newQuery);
+        const data = await dbLesson.findLimiteFiledsPromise(newQuery);
         res.send({ code:Constant.RES_SUCCESS, data });
     }catch(err){
         Logger.error(`getBookedLesson err: ${err}`);
@@ -56,7 +56,7 @@ router.post('/setTutorSchedule', async function(req, res, next) {
     const scheduleMap = req.body.scheduleMap;
     const query = { id:req.session.userId }; 
     try{
-        const tutor = await dbCol.findOnePromise(query); 
+        const tutor = await dbCol.findOneLimiteFiledsPromise(query); 
         const oldScheduleMap = tutor.scheduleMap;
         if(oldScheduleMap){
             for (const [key, value] of oldScheduleMap) {
@@ -103,7 +103,7 @@ router.post('/upload-photo', async (req, res) => {
                 try{
                     const query = { id:req.session.userId };
                     const url =  '/files/' +　photo.name;
-                    const tutor = await dbCol.findOnePromise(query);
+                    const tutor = await dbCol.findOneLimiteFiledsPromise(query);
                     if(tutor.photos.indexOf(url) < 0){ 
                         tutor.photos.push(url);
                     }
@@ -149,7 +149,7 @@ router.post('/delete-photo', async (req, res) => {
         try{
             const query = { id:req.session.userId };
             const url =  '/files/' +　fileName;
-            const tutor = await dbCol.findOnePromise(query); 
+            const tutor = await dbCol.findOneLimiteFiledsPromise(query); 
             const index = tutor.photos.indexOf(url);
             if (index > -1) {
                 tutor.photos.splice(index, 1); // 2nd parameter means remove one item only
@@ -186,7 +186,7 @@ router.post('/upload-video', async (req, res) => {
                 try{
                     const query = { id:req.session.userId };
                     const url =  '/files/' + video.name;
-                    const tutor = await dbCol.findOnePromise(query);
+                    const tutor = await dbCol.findOneLimiteFiledsPromise(query);
                     tutor.video = url;
                     await tutor.save();    
                     res.send({
@@ -230,7 +230,7 @@ router.post('/delete-video', async (req, res) => {
         try{
             const query = { id:req.session.userId };
             const url =  '/files/' +　fileName;
-            const tutor = await dbCol.findOnePromise(query); 
+            const tutor = await dbCol.findOneLimiteFiledsPromise(query); 
             tutor.video = "";
             await tutor.save();
             fs.unlinkSync(path);    
