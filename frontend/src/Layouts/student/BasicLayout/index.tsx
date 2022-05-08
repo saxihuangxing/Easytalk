@@ -2,7 +2,7 @@ import { createElement } from 'react';
 import ProLayout, { DefaultFooter } from '@ant-design/pro-layout';
 import { Link } from 'ice';
 import { asideMenuConfig } from './menuConfig';
-
+import logo from '@/resource/logo.svg'
 const loopMenuItem = (menus) =>
   menus.map(({ icon, children, ...item }) => ({
     ...item,
@@ -13,7 +13,8 @@ const loopMenuItem = (menus) =>
 export default function BasicLayout({ children, location }) {
   return (
     <ProLayout
-      //title="icejs & antd"
+      title=""
+       logo = {logo}
       style={{
         minHeight: '100vh',
       }}
