@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { List, Avatar, Box, Divider, Button } from '@alifd/next';
+import { Image } from 'antd';
 import { getAllTutorInfo } from '@/service/common/api';
 import { ConsoleSqlOutlined } from '@ant-design/icons';
 import Constant from '@/constant';
@@ -60,13 +61,14 @@ export default class tutorInfo extends React.Component {
     return (
       <div>
         <List
+          divider
           dataSource={tutorInfoArr}
           renderItem={(item, i) => (
             <List.Item
               key={i}
-              media={<img width="161" height="108" src={item.img} />}
+              media={<Image width="160px" height="90px" src={item.img} />}
               title={item.title}
-              onClick = {() => { this.handleClickItem(i)}}
+              onClick = {() => { this.handleClickItem(i) }}
             >
               <p style={{ margin: '12px 0' }}>{item.description}</p>
               <div>{item.author}</div>
@@ -78,7 +80,7 @@ export default class tutorInfo extends React.Component {
   }
 
   fetchAllTutorInfo = async () => {
-    let res = await getAllTutorInfo({status:Constant.TUTOR_STATUS.ACTIVE});
+    let res = await getAllTutorInfo({ status:Constant.TUTOR_STATUS.ACTIVE });
     if (res && res.code === Constant.RES_SUCCESS) {
       if (res.data && res.data.length > 0) {
         this.setState({ data: res.data });

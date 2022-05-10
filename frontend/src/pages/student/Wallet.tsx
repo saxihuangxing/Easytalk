@@ -48,6 +48,8 @@ export default class Topup extends React.Component {
 
     render() {
         const { data } = this.state;
+        const { lessonPrice } =  getSystemConfig();
+        const lessonTimes = parseInt( data.balance / lessonPrice );
         return (
             <div>
                 <Card free>
@@ -55,7 +57,7 @@ export default class Topup extends React.Component {
                     <Card.Divider />
                     <Card.Content>
                         <Form.Item colSpan={4} label="余额">
-                            {data.balance} 金币    <Link to="/home/topup">去充值</Link>
+                            {data.balance} 金币,可以预定 {lessonTimes} 节课    <Link to="/home/topup">去充值</Link>
                         </Form.Item>
                         <Form.Item colSpan={4} label="交易记录：">
                         <Table dataSource={data.transations} size={'small'}>
@@ -82,7 +84,7 @@ export default class Topup extends React.Component {
                                         case "Gift": return "奖励";
                                         case "Cancel Lesson": return "取消课程退款";
                                         case "Apply Refund": return "申请退款";
-                                        defaut: return "未知";
+                                        default: return "未知";
                                     }
                                 }} 
                             />

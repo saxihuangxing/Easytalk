@@ -1,8 +1,8 @@
-var createError = require('http-errors');
-var express = require('express');
+const createError = require('http-errors');
+const express = require('express');
 const session = require("express-session");
-var path = require('path');
-var cookieParser = require('cookie-parser');
+const path = require('path');
+const cookieParser = require('cookie-parser');
 const access = require('./routers/access/index');
 const tutorRouter = require('./routers/tutor/index');
 const studentRouter = require('./routers/student/index');
@@ -12,7 +12,7 @@ const fileUpload = require('express-fileupload');
 
 const startLessonMonitor = require('./service/lessonMonitor');
 
-var app = express();
+const app = express();
 
 app.use(function (req, res, next) {
     req.url = req.url.replace("/api/","/");
@@ -47,18 +47,18 @@ app.use(function (req, res, next) {
         || currPath == "/user/enroll" || currPath == '/common/getSystemConfig') {
         next();
     } else {
-        if (req.session.userId) {
-            // app.locals["userInfo"] = req.session.userInfo.username;
-            //如果已经登录，继续执行
+        let role = "";
+        if(currPath.startsWith('/admin')){
+            role = 'admin';
+        }else if(currPath.startsWith('/tutor')){
+            role = 'tutor';
+        }else if(currPath.startsWith('/student')){
+            role = 'student';
+        }
+        if (req.session.userId && (req.session.role === role || currPath.startsWith('/common'))) {
+            // app.locals["userInfo"] = req.session.userInfo.username;        
             next();
         } else {
-            //如果未登录，重定向回去
-            let role = 'student';
-            if(currPath.indexOf('admin') > 0){
-                role = 'admin';
-            }else if(currPath.indexOf('tutor') > 0){
-                role = 'tutor'
-            }
             res.writeHead(200, {"Content-Type": "text/plain"});
             res.end(`{"code":"403","reson":"Not authorized.","role":"${role}"}`);
         }

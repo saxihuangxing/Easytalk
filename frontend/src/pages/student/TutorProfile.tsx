@@ -53,6 +53,7 @@ export default class tutorInfo extends React.Component {
     });
     return result;
   }
+  
   renderCell(rowIndex, value, record) {
     const { scheduleMap } = this.state.data;
     const { bookedLessons } = this.state;
@@ -125,7 +126,7 @@ export default class tutorInfo extends React.Component {
       dlgContent = <p>您当前余额为{balance}金币,预订本次课程将花费 {lessonPrice} 金币</p>
     }else{
       this.inSufficentCoin = true;
-      dlgContent = <div><span>余额不足,您当前余额为{balance},课程需要{lessonPrice}，是否去充值?</span> </div>
+      dlgContent = <div><span>余额不足,您当前余额为{balance}金币,课程需要{lessonPrice}金币，是否去充值?</span> </div>
     }
     return (
       <div>
