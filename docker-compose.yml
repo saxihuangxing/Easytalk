@@ -1,0 +1,73 @@
+version: '3.3'
+
+services:
+  mongo1:
+    container_name: mongo1
+    image: mongo:4.4
+    volumes:
+      - ~/mongors/data1:/data/db
+      - ./script/rs-init.sh:/scripts/rs-init.sh
+    #command: [--auth]
+    networks:
+      net:
+        ipv4_address: 10.7.7.5
+    ports:
+      - 127.0.0.1:27021:27017
+    links:
+      - mongo2
+      - mongo3
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+    environment:
+      - MONGO_INITDB_DATABASE=funtalk
+      - MONGO_INITDB_ROOT_USERNAME=roselyn
+      - MONGO_INITDB_ROOT_PASSWORD=roselyn520  
+  mongo2:
+    container_name: mongo2
+    image: mongo:4.4
+    volumes:
+      - ~/mongors/data2:/data/db  
+    networks:
+      net:
+        ipv4_address: 10.7.7.2
+    ports:
+      - 127.0.0.1:27022:27017
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+
+    
+  mongo3:
+    container_name: mongo3
+    image: mongo:4.4
+    volumes:
+      - ~/mongors/data3:/data/db
+    networks:
+      net:
+        ipv4_address: 10.7.7.3
+    ports:
+      - 127.0.0.1:27023:27017
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+  nodeserver:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    container_name: nodeserver
+    networks:
+      net:
+        ipv4_address: 10.7.7.8
+    ports:
+      - 443:443
+    restart: unless-stopped
+    depends_on:
+      - mongo1
+    environment:
+      PORT: 443
+    volumes:
+      - /var/log:/var/log
+networks:
+  net:
+    ipam:
+      driver: default
+      config:
+        - subnet: "10.7.7.0/24"

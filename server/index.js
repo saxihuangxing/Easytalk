@@ -1,8 +1,9 @@
-var http = require('http');
-var app = require('./app');
-var config = require('./config/config');
+const https = require('https');
+const fs = require('fs');
+const app = require('./app');
+const config = require('./config/config');
 const Logger = require('./utils/Logger');
-var port = normalizePort(process.env.PORT || config.server.port);
+const port = normalizePort(process.env.PORT || config.server.port);
 app.set('port', port);
 
 function uncaughtExceptionHandler(err){
@@ -16,7 +17,10 @@ function uncaughtExceptionHandler(err){
 }
 process.on('uncaughtException', uncaughtExceptionHandler);
 
-var server = http.createServer(app);
+const privateKey  = fs.readFileSync( __dirname  + '/sslcert/funtalk.club.key', 'utf8');
+const certificate = fs.readFileSync( __dirname  +  '/sslcert/funtalk.club.crt', 'utf8');
+const credentials = { key:privateKey, cert:certificate };
+const server = https.createServer(credentials, app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);

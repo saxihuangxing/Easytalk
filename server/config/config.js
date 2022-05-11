@@ -11,7 +11,7 @@ const config  = {
     },
   //  dbUrl : 'mongodb://roselyn:roselyn520@106.52.36.117:27017/admin',
   //  dbUrl : 'mongodb://106.52.36.117:27017/funtalk?replicaSet=rs0', 
-    dbUrl : 'mongodb://106.52.36.117:27021,106.52.36.117:27022,106.52.36.117:27023/funtalk?replicaSet=dbrs', 
+    dbUrl : 'mongodb://10.7.7.5:27017,10.7.7.2:27017,10.7.7.3:27017/funtalk?replicaSet=dbrs', 
     log : {
         "filename": "/var/log/funtalk_backend.log",
         "level": "verbose"

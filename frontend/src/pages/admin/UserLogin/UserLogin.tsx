@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Input, Message, Form, Divider, Checkbox, Icon } from '@alifd/next';
-import styles from './UserLogin.module.scss';
+import styles from '@/pages/admin/UserLogin/userLogin.module.scss';
 import { login } from '@/service/admin/api';
 import CONSTANT from '@/constant';
 const { Item } = Form;

@@ -4,7 +4,7 @@ import SignIn from './signIn';
 import Aplly from './aplly';
 import Home from '@/pages/student/FrontPages/HomePage';
 import ContactUs from '@/pages/student/FrontPages/ContactUs';
-import TutorQuality from '@/pages/student/FrontPages/tutorQuality';
+import TutorQuality from '@/pages/student/FrontPages/TutorQuality';
 import LessonSystem from '@/pages/student/FrontPages/LessonSystem';
 import { useState } from 'react';
 const { Item } = Nav;
