@@ -4,7 +4,7 @@
     min-width: 1200px;
     min-height: 100vh;
    /*  height: 100vh; */
-    background-image: url('bg_tutor.png');
+    background-image: url('@/resource/bg_tutor.png');
     background-color:aliceblue;              /*aliceblue*/
     background-size: 100% 100%;
     display: flex;
