@@ -129,7 +129,7 @@ export async function getHistoryLesson() {
 
 export async function getCanceledLesson() {
   try{
-    const response = await Axios.post('/api/student/getMyLesson',
+    const response = await Axios.post('/api/tutor/getMyLesson',
     { query:{ $or: [{ status:Constant.LESSON_STATUS.CANCELED },
       { status:Constant.LESSON_STATUS.REFUND }, { status:Constant.LESSON_STATUS.DISPUTE } ] } });
     const { data } = response;
