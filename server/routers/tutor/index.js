@@ -59,11 +59,12 @@ router.post('/setTutorSchedule', async function(req, res, next) {
         const tutor = await dbCol.findOneLimiteFiledsPromise(query); 
         const oldScheduleMap = tutor.scheduleMap;
         if(oldScheduleMap){
+            const currentTime = Date.now()/1000/60 + 25;
             for (const [key, value] of oldScheduleMap) {
-                if(value === Constant.SCHEDULE_STATUS.BOOKED
+                if(value === Constant.SCHEDULE_STATUS.BOOKED && key > currentTime
                 && scheduleMap[key] !== Constant.SCHEDULE_STATUS.BOOKED){
                 Logger.error(`setTutorSchedule error, can't change already booked lesson status`);
-                res.send({ code:CONSTANT.RES_FAILED });  
+                res.send({ code:CONSTANT.RES_FAILED });
                 return;
             }
           }
