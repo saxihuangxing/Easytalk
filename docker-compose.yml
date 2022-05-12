@@ -65,6 +65,7 @@ services:
       PORT: 443
     volumes:
       - /var/log:/var/log
+      - ~/mongors/files:/app/server/public/files
 networks:
   net:
     ipam:
