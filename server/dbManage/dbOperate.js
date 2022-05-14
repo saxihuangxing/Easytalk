@@ -52,17 +52,12 @@ class DbOperator {
     }); */
   }
 
+  removeOne(query){
+    return this.Module.deleteOne(query);
+  }
+
   remove(query) {
-    return new Promise((res,rej) => {
-      this.Module.remove(query, function (err, res) {
-        if (err) {
-          Logger.error(`db remove ${JSON.stringify(err)}`);
-          rej(err);
-        } else {
-          res()
-        }
-      });
-    });
+     return this.Module.remove(query);
   }
 
   updateOne(query, data) {

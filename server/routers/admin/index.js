@@ -3,7 +3,7 @@ var router = express.Router();
 const Logger = require('../../utils/Logger');
 const tutorDb = require('../../dbManage/dbOperate')('tutor');
 const walletDb = require('../../dbManage/dbOperate')('wallet');
-const studentDb = require('../../dbManage/dbOperate')('stusdent');
+const studentDb = require('../../dbManage/dbOperate')('student');
 const lessonDb = require('../../dbManage/dbOperate')('lesson');
 const CONSTANT = require('../../constant');
 const dbTopupApply = require('../../dbManage/dbOperate')('topupApply');
@@ -22,14 +22,26 @@ router.post('/setTutorStatus', async function(req, res, next) {
 router.post('/deleteStudent', async function(req, res, next) {
     const id = req.body.studentId;
     try{
-        await studentDb.remove({ id });
-        await walletDb.remove({ userId: id });
+        await studentDb.removeOne({ id });
+        await walletDb.removeOne({ userId: id });
         res.send({ code:CONSTANT.RES_SUCCESS });  
     }catch(err){
         Logger.error(`deleteStudent err: ${err}`);
         res.send({ code:CONSTANT.RES_FAILED });  
     }
 });
+
+router.post('/deleteTutor', async function(req, res, next) {
+    const id = req.body.tutorId;
+    try{
+        await tutorDb.removeOne({ id });
+        res.send({ code:CONSTANT.RES_SUCCESS });  
+    }catch(err){
+        Logger.error(`deleteTutor err: ${err}`);
+        res.send({ code:CONSTANT.RES_FAILED });  
+    }
+});
+
 
 const topupWallet = async (walletId,amount) => {
     const wallet = await walletDb.findOneLimiteFiledsPromise({ id:walletId });
@@ -86,6 +98,21 @@ router.post('/getLessonInfo', async function(req, res, next) {
 });
 
 
+router.post('/getStudentDetails', async function(req, res, next) {
+    const studentId = req.body.studentId;
+    try{
+        const student = await studentDb.findOneLimiteFiledsPromise({ id:studentId },{ accountPassword:0 });
+        const wallet = await walletDb.findOneLimiteFiledsPromise({ userId:studentId });
+        const lesson = await lessonDb.findLimiteFiledsPromise({ stuId:studentId });
+        const data = { student, wallet, lesson };
+        res.send({ code:CONSTANT.RES_SUCCESS, data });
+    }catch(err){
+        Logger.error(`getStudentDetails err: ${err}`);
+        res.send({ code:CONSTANT.RES_FAILED });  
+    }    
+});
+
+
 router.post('/getTopupApplyInfo', async function(req, res, next) {
     const projection = req.body.projection;
     const query = req.body.query?req.body.query:{};
@@ -97,6 +124,8 @@ router.post('/getTopupApplyInfo', async function(req, res, next) {
         res.send({ code:CONSTANT.RES_FAILED });  
     }    
 });
+
+
 
 router.post('/dealTopupApply', async function(req, res, next) {
     const approve = req.body.approve;

@@ -272,6 +272,19 @@ router.post("/getMyLesson", async function (req, res, next) {
   }
 });
 
+router.post("/lessonFeedback", async function (req, res, next) {
+  const lessonId = req.body.lessonId;
+  const rate = req.body.rate;
+  const comment = req.body.comment;
+  try {
+    const data = await dbLesson.updateOne({ lessonId }, { stuRate:rate, stuComment:comment  });
+    res.send({ code: Constant.RES_SUCCESS, data });
+  } catch (err) {
+    Logger.error(`lessonFeedback err: ${err}`);
+    res.send({ code: Constant.RES_FAILED });
+  }
+});
+
 router.post("/topupApply", async function (req, res, next) {
   try {
     const student = await dbStudent.findOneLimiteFiledsPromise({

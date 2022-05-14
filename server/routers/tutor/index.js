@@ -245,4 +245,16 @@ router.post('/delete-video', async (req, res) => {
     }
 });
 
+router.post("/lessonFeedback", async function (req, res, next) {
+    const lessonId = req.body.lessonId;
+    const comment = req.body.comment;
+    try {
+      const data = await dbLesson.updateOne({ lessonId }, {  tutorComment:comment  });
+      res.send({ code: Constant.RES_SUCCESS, data });
+    } catch (err) {
+      Logger.error(`lessonFeedback err: ${err}`);
+      res.send({ code: Constant.RES_FAILED });
+    }
+  });
+
 module.exports = router;
