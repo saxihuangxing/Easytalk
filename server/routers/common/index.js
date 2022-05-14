@@ -3,6 +3,7 @@ var router = express.Router();
 const Logger = require('../../utils/Logger');
 const tutorDb = require('../../dbManage/dbOperate')('tutor');
 const studentDb = require('../../dbManage/dbOperate')('student');
+const lessonDb = require('../../dbManage/dbOperate')('lesson');
 const CONSTANT = require('../../constant');
 const fs = require('fs');
 
@@ -85,6 +86,18 @@ router.post('/modifyPassword', async function(req, res, next) {
         return; 
     }
     res.send({ code:CONSTANT.RES_FAILED }); 
+});
+
+
+router.post('/getLessonById', async function(req, res, next) {
+    const lessonId = req.body.lessonId;
+    try{
+        const data = await lessonDb.findOneLimiteFiledsPromise({ lessonId });
+        res.send({ code:CONSTANT.RES_SUCCESS, data });
+    }catch(err){
+        Logger.error(`getWalletInfo err: ${err}`);
+        res.send({ code:CONSTANT.RES_FAILED });  
+    }    
 });
 
 

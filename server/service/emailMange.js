@@ -43,7 +43,7 @@ const cancelLessonNotify = (sendto, tutorName, stuName, lessonTime) => {
   try {
     const subject = "fun talk: Cancel book lesson notify";
     const strTime = moment(lessonTime * 60 * 1000).format("YYYY/MM/DD HH:mm");
-    const content = `student ${stuName} cancel reservation with tutor ${tutorName} at ${strTime}}`;
+    const content = `student ${stuName} cancel reservation with tutor ${tutorName} at ${strTime}`;
     sendEmail(sendto, subject, content);
   } catch (err) {
     Logger.info(`cancelLessonNotify err:${err}`);
