@@ -25,11 +25,11 @@ class SignIn extends React.Component {
     return (
       <div style={{ display: 'inline-block' }}>
         <Button onClick={this.onOpen} type="primary">
-          SignIn
+          Login In
         </Button>
         <Dialog
           v2
-          title="Sign In"
+          title="Login In"
           visible={this.state.visible}
           onOk={this.onClose}
           onClose={this.onClose}

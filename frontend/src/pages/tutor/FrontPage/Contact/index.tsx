@@ -17,10 +17,11 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
+    paddingTop: '100px'
   },
   content: {
     width: '400px',
-    color: '#fff',
+    color: '##0f0202',
   },
   title: {
     marginBottom: '20px',

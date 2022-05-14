@@ -119,14 +119,24 @@ export default class TutorManage extends Component {
             />
             <Table.Column title={"status"} dataIndex="status"
                cell={(value, index, record) => {
-                    if(value === Constant.LESSON_STATUS.WAITING){
-                       return "waiting...";
-                    }else {
-                        return "wrong status"
-                    }
+                    return value
               }}
             />
-             <Table.Column title={"TextBook"} dataIndex="textBook"  /> 
+             <Table.Column title={"TextBook"} dataIndex="textBook"  />
+             <Table.Column title={"Operation"} dataIndex="textBook"
+                        cell={(value, index, record) => {
+                            return (
+                                <div>
+                                    <Button
+                                        onClick={() => {
+                                            window.open('#/admin/home/lessonDetails?lessonId='+record.lessonId);
+                                        }}
+                                    >
+                                        { 'details' }
+                                    </Button>
+                            </div>
+                            )
+                        }} /> 
         </Table>
         <div style={styles.paginationContainer}>
           <Pagination

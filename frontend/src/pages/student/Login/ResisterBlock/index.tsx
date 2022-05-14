@@ -134,6 +134,7 @@ export default function RegisterBlock() {
               size="large"
               htmlType="password"
               placeholder="最少六位,区分大小写"
+              maxLength={50}
             />
           </Item>
           <Item required requiredTrigger="onFocus" requiredMessage="neccessary" validator={checkPass}>
@@ -142,13 +143,15 @@ export default function RegisterBlock() {
               size="large"
               htmlType="password"
               placeholder="确认密码"
+              maxLength={50}
             />
           </Item>
           <Item required requiredTrigger="onFocus"  requiredMessage="neccessary">
             <Input
               name="name"
               size="large"
-              placeholder="请使用英语名或拼音字母方便外教老师"
+              placeholder="请输入姓名"
+              maxLength={20}
             />
           </Item>
           <Item>

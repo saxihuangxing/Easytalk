@@ -89,13 +89,14 @@ export default function RegisterBlock() {
 
         <Form value={postData} onChange={formChange} size="large">
           <Item format="email" required requiredMessage="neccessary">
-            <Input name="email" size="large" maxLength={20} placeholder="email" />
+            <Input name="email" size="large" maxLength={50} placeholder="email" />
           </Item>
           <Item required requiredMessage="neccessary">
             <Input.Password
               name="password"
               size="large"
               htmlType="password"
+              maxLength={50}
               placeholder="at least six password，distinguish captal and small letter"
             />
           </Item>
@@ -104,6 +105,7 @@ export default function RegisterBlock() {
               name="rePassword"
               size="large"
               htmlType="password"
+              maxLength={50}
               placeholder="confirm password"
             />
           </Item>

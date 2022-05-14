@@ -138,3 +138,14 @@ export async function getCanceledLesson() {
      return { "code":Constant.RES_FAILED }
    }
 }
+
+export async function tutorCommentLesson( lessonId, comment) {
+  try{
+    const response = await Axios.post('/api/tutor/lessonFeedback',{ lessonId, comment  });
+    const { data } = response;
+    return data; 
+   }catch(err){
+     console.error("tutorCommentLesson err:" + err);
+     return { "code":Constant.RES_FAILED }
+   }
+}

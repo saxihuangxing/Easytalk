@@ -3,6 +3,7 @@ import { Table, Avatar, Box, Divider, Button, Message } from '@alifd/next';
 import { getBookedLesson, getCanceledLesson } from '@/service/tutor/dataSource';
 import Constant from '@/constant';
 import moment from 'moment';
+import CommonUtil from '@/utils/CommonUtils';
 
 // eslint-disable-next-line @iceworks/best-practices/recommend-functional-component
 export default class BookedLesson extends React.Component {
@@ -54,13 +55,13 @@ export default class BookedLesson extends React.Component {
         <span> Canceled Lesson Table </span>
         <Table dataSource={canceledLessons} size={'small'}>
             <Table.Column title={"LessonId"} dataIndex="lessonId"  />
-            <Table.Column title={"TutorId"} dataIndex="tutorId"  />
-            <Table.Column title={"TutorName"} dataIndex="tutorName"  />
-            <Table.Column title={"bookTime"} dataIndex="bookTime" 
+            <Table.Column title={"Student Id"} dataIndex="stuId"  />
+            <Table.Column title={"Student Name"} dataIndex="stuName"  />
+            <Table.Column title={"Book Time"} dataIndex="bookTime" 
               cell={(value, index, record) => {
                     return moment(value).format('MM-DD HH:mm');
               }}/>
-            <Table.Column title={"lessonTime"} dataIndex="lessonTime"
+            <Table.Column title={"Lesson Time"} dataIndex="lessonTime"
                cell={(value, index, record) => {
                     return moment(value*1000*60).format('MM-DD HH:mm');
               }}
@@ -76,6 +77,7 @@ export default class BookedLesson extends React.Component {
     let res = await getBookedLesson();
     if (res && res.code === Constant.RES_SUCCESS) {
       if (res.data && res.data.length > 0) {
+        CommonUtil.sortArray(res.data, 'lessonTime', false);
         this.setState({ bookedLessons: res.data });
       }
     }

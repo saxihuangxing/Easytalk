@@ -63,3 +63,16 @@ export async function modifyPassword(params:ModifyPassWordStru) {
   }
   return null;
 }
+
+export async function getLessonById( lessonId ) {
+  try{
+   const response = await Axios.post('/api/common/getLessonById', { lessonId }); 
+   const { data } = response;
+   if(data.code == Constant.RES_SUCCESS){
+     return data.data
+   }
+  }catch(err){
+    console.error("getLessonById err:",err);
+    return null;
+  }
+}

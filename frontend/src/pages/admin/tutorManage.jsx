@@ -3,9 +3,12 @@ import React, { Component } from 'react';
 import { Table, Pagination, Icon, Message, Button } from '@alifd/next';
 import { Link } from 'react-router-dom';
 import { getAllTutorInfo } from '@/service/common/api';
-import { setTutorStatus } from '@/service/admin/api';
+import { setTutorStatus, deleteTutorById } from '@/service/admin/api';
 import CommonUtil from '@/utils/CommonUtils';
 import Constant from '@/constant';
+import { Modal } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+
 export default class TutorManage extends Component {
   static displayName = 'Tutor List';
 
@@ -94,7 +97,8 @@ export default class TutorManage extends Component {
           type="primary"
           style={styles.button}
           onClick={() => {
-            
+           // window.location.href = `#/admin/home/tutorDetail?tutorId=${record.id}`;
+              window.open(`#/admin/home/tutorDetail?tutorId=${record.id}`);
           }}
         >
           details
@@ -103,7 +107,7 @@ export default class TutorManage extends Component {
           type="primary"
           style={styles.button}
           onClick={() => {
-            this.deleteTutor(record.tutorId);
+            this.deleteTutor(record.id);
           }}
         >
           delete
@@ -172,7 +176,25 @@ export default class TutorManage extends Component {
     );
   }
 
-  deleteTutor(tutorId) {}
+  deleteTutor(tutorId) {
+    const self = this;
+    Modal.confirm({
+      title: 'Delete tutor?',
+      icon: <ExclamationCircleOutlined />,
+      content: 'are u sure delete tutor,once it deleted , the data cant recover',
+      onOk() {
+        deleteTutorById(tutorId).then((res)=>{
+              if(res.code == Constant.RES_SUCCESS){
+                Message.success(`delete tutor successful!`) ;
+                self.fetchTutorsListData(self.currentPage);
+              }else{
+                Message.error('delete tutor failed'); 
+              }
+          });
+      },
+      onCancel() {},
+  });
+  }
 }
 
 const styles = {

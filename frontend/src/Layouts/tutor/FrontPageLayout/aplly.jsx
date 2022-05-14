@@ -25,11 +25,11 @@ class Aplly extends React.Component {
     return (
       <div style={{ display: 'inline-block' }}>
         <Button onClick={this.onOpen} type="primary">
-          Apply
+          Register
         </Button>
         <Dialog
           v2
-          title="Apply"
+          title="Register"
           visible={this.state.visible}
           onOk={this.onClose}
           onClose={this.onClose}

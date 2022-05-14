@@ -85,11 +85,11 @@ const LoginBlock: React.FunctionComponent<LoginProps> = (
     <div className={styles.LoginBlock}>
       <div className={styles.innerBlock}>
         <Form value={postData} onChange={formChange} size="large">
-          <Item required requiredMessage="neccesary">
-            <Input name="name" maxLength={20} placeholder="UserName" />
+          <Item format="email" required requiredMessage="neccessary">
+            <Input name="name" size="large" maxLength={50} placeholder="email" />
           </Item>
           <Item required requiredMessage="neccesary" style={{ marginBottom: 0 }}>
-            <Input.Password name="password" htmlType="password" placeholder="Password" />
+            <Input.Password name="password" htmlType="password" maxLength={50} placeholder="Password" />
           </Item>
           <div className={styles.infoLine}>
             <Item style={{ marginBottom: 0 }}>
@@ -97,11 +97,11 @@ const LoginBlock: React.FunctionComponent<LoginProps> = (
                 auto login
               </Checkbox>
             </Item>
-            <div>
+         {/*    <div>
               <a href="/" className={styles.link}>
                 forget password
               </a>
-            </div>
+            </div> */}
           </div>
 
           <Item style={{ marginBottom: 10 }}>

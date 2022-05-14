@@ -4,7 +4,9 @@ function Home() {
   return (
     <div style={styles.container}>
       <div style={styles.content}>
-        <div style={styles.title}>Become an Online English teacher Today! </div>
+        <div style={styles.title}>Join us and become an online English teacher today!
+        Start your flexible life!
+         </div>
       </div>
     </div>
   );
@@ -17,9 +19,10 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
+    paddingTop: '100px'
   },
   content: {
-    width: '400px',
+    width: '500px',
     color: '#0f0202',
   },
   title: {

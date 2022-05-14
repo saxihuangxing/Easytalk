@@ -153,3 +153,13 @@ export async function getMyWallet() {
 }
 
 
+export async function commentLesson( lessonId, rate, comment) {
+  try{
+    const response = await Axios.post('/api/student/lessonFeedback',{ lessonId, rate, comment  });
+    const { data } = response;
+    return data; 
+   }catch(err){
+     console.error("commentLesson err:" + err);
+     return { "code":Constant.RES_FAILED }
+   }
+}

@@ -20,12 +20,15 @@ import AdminBookedLesson from '@/pages/admin/BookLesson';
 import AdminHistoryLesson from '@/pages/admin/HistoryLesson';
 import AdminTopupApply from '@/pages/admin/TopupManange';
 import AdminTopupApplyHistory from '@/pages/admin/topupApplyHistory';
+const AdminTutorDetails = lazy(() => import('@/pages/admin/TutorDetails'));
+const AdminStudentDetails = lazy(() => import('@/pages/admin/studentDetails'));
 const Schedule = lazy(() => import('@/pages/tutor/Schedule'));
 const TutorBookedLesson = lazy(() => import('@/pages/tutor/BookedLesson'));
 const TutorHistoryLesson = lazy(() => import('@/pages/tutor/HistoryLesson'));
 const FrontPageHome = lazy(() => import('@/pages/tutor/FrontPage/Home'));
 const Contact = lazy(() => import('@/pages/tutor/FrontPage/Contact'));
 const NotFound = lazy(() => import('@/components/NotFound'));
+const LessonDetails = lazy(() => import('@/components/LessonDetails'));
 
 const routerConfig: IRouterConfig[] = [
   {
@@ -39,6 +42,7 @@ const routerConfig: IRouterConfig[] = [
           { path: '/bookedLessons', component: TutorBookedLesson },
           { path: '/historyLessons', component: TutorHistoryLesson },
           { path: '/schedule', component: Schedule },
+          { path: '/lessonDetails', component: LessonDetails },
           { component: NotFound },
         ],
       },
@@ -60,11 +64,14 @@ const routerConfig: IRouterConfig[] = [
         component: AdminBasicLayout,
         children: [
           { path: '/tutorManage', exact: true, component: TutorManage },
-          { path: '/studentMange', exact:true, component: StudentManage},
-          { path: '/bookedLesson', exact: true, component: AdminBookedLesson},
-          { path: '/historyLesson', exact:true, component: AdminHistoryLesson},
-          { path: '/topupApplyChecking', exact:true, component: AdminTopupApply},
-          { path: '/topupApplyHistory', exact:true, component: AdminTopupApplyHistory},
+          { path: '/studentMange', exact:true, component: StudentManage },
+          { path: '/bookedLesson', exact: true, component: AdminBookedLesson },
+          { path: '/historyLesson', exact:true, component: AdminHistoryLesson },
+          { path: '/topupApplyChecking', exact:true, component: AdminTopupApply} ,
+          { path: '/topupApplyHistory', exact:true, component: AdminTopupApplyHistory },
+          { path: '/tutorDetail', exact:true, component: AdminTutorDetails },
+          { path: '/studentDetail', exact:true, component: AdminStudentDetails },
+          { path: '/lessonDetails', component: LessonDetails },   
         ]
       },
       {
@@ -90,6 +97,7 @@ const routerConfig: IRouterConfig[] = [
           { path: '/wallet', component: StuWallet },
           { path: '/account', component: StuAccount },
           { path: '/main', component: StudentMainPage() },
+          { path: '/lessonDetails', component: LessonDetails }
         ],
       },
       {

@@ -77,7 +77,7 @@ export default class BookedLesson extends React.Component {
       this.bookedLessonIndex = index;
     }
     return (
-      <Button type={'primary'} onClick={onCancelButtonClick.bind(this)} > Cancel </Button>
+      <Button type={'primary'} onClick={onCancelButtonClick.bind(this)} >  取消 </Button>
     )
   };
 
@@ -146,7 +146,7 @@ export default class BookedLesson extends React.Component {
     let res = await getBookedLesson();
     if (res && res.code === Constant.RES_SUCCESS) {
       const array = res.data;
-      CommonUtil.sortArray(array, 'lessonTime', false);
+      CommonUtil.sortArray(array, 'lessonTime', true);
       if (res.data && res.data.length > 0) {
         this.setState({ bookedLessons: array });
       }
