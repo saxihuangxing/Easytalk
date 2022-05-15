@@ -47,6 +47,7 @@ const Constant = {
         topup:"Top Up",
         bookLesson: "Book Lesson",
         gift: "Gift",
+        admindOperate: "admin Operate",
         cancelLesson: "Cancel Lesson",
         applyRefund: "Apply Refund",
     }

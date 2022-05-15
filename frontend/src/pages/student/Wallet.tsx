@@ -84,6 +84,7 @@ export default class Topup extends React.Component {
                                         case "Gift": return "奖励";
                                         case "Cancel Lesson": return "取消课程退款";
                                         case "Apply Refund": return "申请退款";
+                                        case Constant.walletTransReason.admindOperate: return '管理员操作';
                                         default: return "未知";
                                     }
                                 }} 

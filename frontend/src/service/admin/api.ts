@@ -37,6 +37,18 @@ export async function walletTopup( walletId:string, amount:Number ) {
   }
 }
 
+export async function walletDeduct( walletId:string, amount:Number ) {
+  try{
+   const response = await Axios.post('/api/admin/deductWallet', { walletId, amount }); 
+   const { data } = response;
+   return data; 
+  }catch(err){
+    console.error("walletTopup err:",err);
+    return {"code":Constant.RES_FAILED}
+  }
+}
+
+
 export async function getTopupApplyInfo( query,projection ) {
   try{
    const response = await Axios.post('/api/admin/getTopupApplyInfo', { query,projection }); 
@@ -89,39 +101,13 @@ export async function getWalletInfo( query, projection ) {
   }
 }
 
-
-export async function getStudentDetails( studentId ) {
-  try{
-   const response = await Axios.post('/api/admin/getStudentDetails', { studentId }); 
-   const { data } = response;
-   if(data.code == Constant.RES_SUCCESS){
-     return data.data
-   }
-   return null;
-  }catch(err){
-    console.error("getStudentDetails err:",err);
-    return null;
-  }
-}
-
-export async function deleteStudentById( studentId:string ) {
+export async function deleteStudent( studentId:string ) {
   try{
    const response = await Axios.post('/api/admin/deleteStudent', { studentId }); 
    const { data } = response;
    return data; 
   }catch(err){
     console.error("deleteStudent err:",err);
-    return {"code":Constant.RES_FAILED}
-  }
-}
-
-export async function deleteTutorById( tutorId:string ) {
-  try{
-   const response = await Axios.post('/api/admin/deleteTutor', { tutorId }); 
-   const { data } = response;
-   return data; 
-  }catch(err){
-    console.error("deleteTutor err:",err);
     return {"code":Constant.RES_FAILED}
   }
 }

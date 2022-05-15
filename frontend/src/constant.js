@@ -47,6 +47,14 @@
         UNKNOW: -1,
         TimeTooClose: 0,
         LessonInfoError: 1,
+    }, 
+    walletTransReason:{
+        topup:"Top Up",
+        bookLesson: "Book Lesson",
+        gift: "Gift",
+        admindOperate: "admin Operate",
+        cancelLesson: "Cancel Lesson",
+        applyRefund: "Apply Refund",
     }
 }
 

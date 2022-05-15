@@ -57,6 +57,24 @@ const topupWallet = async (walletId,amount) => {
     return wallet.balance;
 }
 
+const deductWallet = async (walletId,amount) => {
+    const wallet = await walletDb.findOneLimiteFiledsPromise({ id:walletId });
+    if(!wallet){
+        res.send({ code:CONSTANT.RES_FAILED, reason: "can't find wallet" });
+        return; 
+    }
+    if(wallet.balance < amount){
+        res.send({ code:CONSTANT.RES_FAILED, reason: `the balance is ${wallet.balance}, can't enought to deduct ${amount} `});
+        return; 
+    }
+    wallet.balance = wallet.balance - amount;
+    const transation = { action:false, amount:amount, time: Date.now(),
+        reason: CONSTANT.walletTransReason.admindOperate, balance:wallet.balance };
+    wallet.transations.unshift(transation);
+    await wallet.save();
+    return wallet.balance;
+}
+
 router.post('/TopUpWallet', async function(req, res, next) {
     const walletId = req.body.walletId;
     const amount = req.body.amount;
@@ -66,6 +84,21 @@ router.post('/TopUpWallet', async function(req, res, next) {
     }
     try{
         const balance = await topupWallet(walletId,amount)
+        res.send({ code:CONSTANT.RES_SUCCESS, balance: balance});
+    }catch(err){
+        res.send({ code:CONSTANT.RES_FAILED, reason: `run err: ${err}`  });
+    }
+});
+
+router.post('/deductWallet', async function(req, res, next) {
+    const walletId = req.body.walletId;
+    const amount = req.body.amount;
+    if(!walletId || !amount){
+        res.send({ code:CONSTANT.RES_FAILED, reason: "walletId or amount null" });
+        return; 
+    }
+    try{
+        const balance = await deductWallet(walletId,amount)
         res.send({ code:CONSTANT.RES_SUCCESS, balance: balance});
     }catch(err){
         res.send({ code:CONSTANT.RES_FAILED, reason: `run err: ${err}`  });

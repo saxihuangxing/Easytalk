@@ -3,13 +3,11 @@ import React, { Component } from 'react';
 import { Table, Pagination, Icon, Message, Button, Dialog, Input, NumberPicker } from '@alifd/next';
 import { Link } from 'react-router-dom';
 import { getAllStudentInfo } from '@/service/common/api';
-import { deleteStudentById } from '@/service/admin/api';
-import { walletTopup } from '@/service/admin/api';
+import { walletTopup, walletDeduct } from '@/service/admin/api';
 import { getWalletInfo } from '@/service/admin/api';
 import CommonUtil from '@/utils/CommonUtils';
 import Constant from '@/constant';
 import { Modal } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 export default class studentManage extends Component {
   static displayName = 'Student List';
@@ -42,6 +40,7 @@ export default class studentManage extends Component {
     this.fetchStudentListData(1);
   }
 
+
   fetchStudentListData = async (page) => {
     const _this = this;
     const tableData = this.state.tableData;
@@ -50,9 +49,9 @@ export default class studentManage extends Component {
     const data = await getAllStudentInfo();
     const wallets = await getWalletInfo();
     if (data != null && data.length > 0) {
-      data.map((item) => {
-        for (let i in wallets) {
-          if (wallets[i].id == item.walletId) {
+      data.map((item)=>{
+        for(let i in wallets){
+          if(wallets[i].id == item.walletId){
             item.balance = wallets[i].balance;
           }
         }
@@ -95,28 +94,20 @@ export default class studentManage extends Component {
   renderOperations = (value, index, record) => {
     return (
       <div className="operation-table-operation" style={styles.operationTable}>
-        <Button
-          type="primary"
-          style={styles.button}
-          onClick={() => {
-            // window.location.href = `#/admin/home/tutorDetail?tutorId=${record.id}`;
-            window.open(`#/admin/home/studentDetail?studentId=${record.id}`);
-          }}
-        >
+        <Button type="primary" style={styles.button}>
           details
         </Button>
-        <Button
-          type="primary"
-          style={styles.button}
+        <Button type="primary"  style={styles.button}
           onClick={() => {
             this.deleteStudent(record.id);
           }}
         >
           delete
         </Button>
-        <Button
-          type="primary"
-          style={styles.button}
+        <Button type="primary"   style={styles.button} >
+          deactive
+        </Button>
+        <Button type="primary"  style={styles.button}
           onClick={() => {
             //this.deleteStudent(record.id);
             this.setState({ topupDlgVisible: true });
@@ -126,6 +117,35 @@ export default class studentManage extends Component {
         >
           topup
         </Button>
+
+        <Button type="primary"  style={styles.button}
+          onClick={() => {
+            let number = 0;
+            const onNumberPickerChange  = (value) => {
+              number = value;
+            }
+            Modal.confirm({
+              title: 'deduct wallet',
+              icon: <ExclamationCircleOutlined />,
+              content: ( <div> the amount wanna deduct:
+                           <NumberPicker hasTrigger={false} onChange={onNumberPickerChange.bind(this)} /> 
+                        </div>),
+              onOk() {
+                const res = await walletDeduct(this.selectRecord.walletId,number);
+                if(res.code == Constant.RES_SUCCESS){
+                  Message.success("deduct wallet sucess!");
+                  this.fetchStudentListData(this.currentPage);
+                }else{
+                  Message.error("deduct wallet  failed!","reson is:",res.reason);
+                }
+              },
+              onCancel() {},
+          });
+          }}
+        >
+          deduct
+        </Button>
+
       </div>
     );
   };
@@ -147,7 +167,7 @@ export default class studentManage extends Component {
   render() {
     const { tableData, isLoading } = this.state;
     function onNumberPickerChange(value) {
-      console.log('changed', value);
+      console.log("changed", value);
       this.topupValue = value;
     }
     return (
@@ -159,10 +179,34 @@ export default class studentManage extends Component {
           style={styles.basicTable}
           hasBorder={false}
         >
-          <Table.Column title="Id" dataIndex="id" width={200} alignHeader="left" align="left" />
-          <Table.Column title="Account" dataIndex="accountName" width={200} alignHeader="left" align="left" />
-          <Table.Column title="Name" dataIndex="name" width={200} alignHeader="left" align="left" />
-          <Table.Column title="Balance" dataIndex="balance" width={150} alignHeader="left" align="left" />
+          <Table.Column
+            title="Id"
+            dataIndex="id"
+            width={200}
+            alignHeader="left"
+            align="left"
+          />
+          <Table.Column
+            title="Account"
+            dataIndex="accountName"
+            width={200}
+            alignHeader="left"
+            align="left"
+          />
+          <Table.Column
+            title="Name"
+            dataIndex="name"
+            width={200}
+            alignHeader="left"
+            align="left"
+          />
+           <Table.Column
+            title="Balance"
+            dataIndex="balance"
+            width={150}
+            alignHeader="left"
+            align="left"
+          />
           <Table.Column title="Operate" dataIndex="operation" width={250} align="left" cell={this.renderOperations} />
         </Table>
         <div style={styles.paginationContainer}>
@@ -176,7 +220,7 @@ export default class studentManage extends Component {
         <Dialog
           v2
           title="Top up"
-          visible={this.state.topupDlgVisible}
+          visible={ this.state.topupDlgVisible }
           onOk={this.topupConfirm.bind(this)}
           onClose={this.topupCancel.bind(this)}
         >
@@ -187,43 +231,24 @@ export default class studentManage extends Component {
     );
   }
 
-  async topupConfirm() {
-    const res = await walletTopup(this.selectRecord.walletId, this.topupValue);
-    if (res.code == Constant.RES_SUCCESS) {
-      Message.success('top up sucess!');
+  async topupConfirm(){
+    const res = await walletTopup(this.selectRecord.walletId,this.topupValue);
+    if(res.code == Constant.RES_SUCCESS){
+      Message.success("top up sucess!");
       this.fetchStudentListData(this.currentPage);
-    } else {
-      Message.error('top up failed!');
+    }else{
+      Message.error("top up failed!");
     }
-    this.setState({ topupDlgVisible: false });
+    this.setState({ topupDlgVisible:false })
   }
-  topupCancel() {
-    this.setState({ topupDlgVisible: false });
+  topupCancel(){
+    this.setState({ topupDlgVisible:false })
   }
-
-  deleteStudent(studentId) {
-    const self = this;
-    Modal.confirm({
-      title: 'Delete student?',
-      icon: <ExclamationCircleOutlined />,
-      content: 'are u sure delete student ,once it deleted , the data cant recover',
-      onOk() {
-        deleteStudentById(studentId).then((res) => {
-          if (res.code == Constant.RES_SUCCESS) {
-            Message.success(`delete student successful!`);
-            self.fetchStudentListData(self.currentPage);
-          } else {
-            Message.error('delete student failed');
-          }
-        });
-      },
-      onCancel() {},
-    });
-  }
+  deleteStudent(tutorId) {}
 }
 
 const styles = {
-  button: {
+  button:{
     marginRight: '5px',
     marginBottom: '5px',
   },
